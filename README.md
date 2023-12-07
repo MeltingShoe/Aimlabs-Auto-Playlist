@@ -21,3 +21,5 @@ This program is meant to solve some of the problems I have with the Voltaic benc
 - Deeplinks are launched either by a shortcut or by a timer, not sure which
 - It gives guidance on how to do specific tasks like "focus on accuracy" or "stay relaxed" or "try not to lift your mouse"
 - The same scenario can have different guidance so we can use the same scenario for working on different things
+- Multiple benchmarks can be used for the same category. So rather than doing novice until you've beat it and then moving to intermediate you'll do a combination of both and those scores are like combined somehow
+- Eventually I definitely should make custom scenarios for this.
