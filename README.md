@@ -7,6 +7,7 @@ This program is meant to solve some of the problems I have with the Voltaic benc
 3. Basically make a normal playlist of benchmarks externally
 4. Make auto-benchmark, which scales the amount of times you play each benchmark
 5. Do all the complicated stuff to add in fundamental routines
+6. Add a UI
 
 ### Goals:
 - It should effectively combine benchmarks with fundamental routines to target weakpoints.
