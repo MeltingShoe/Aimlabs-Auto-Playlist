@@ -10,6 +10,7 @@ This program is meant to solve some of the problems I have with the Voltaic benc
 6. Add a UI
 
 ### Goals:
+- Forces you to take breaks!
 - It should effectively combine benchmarks with fundamental routines to target weakpoints.
 - It should repeat a task if you score within a percentage of your high score. We never want to stop right after setting a new high score. We want to spend as much time as we can improving, and switch tasks when we stop doing that to be efficient with our time
 - Benchmarks should persist between sessions
