@@ -1,6 +1,13 @@
 # Aimlabs-Auto-Playlist
 This program is meant to solve some of the problems I have with the Voltaic benchmarks for aimlabs/kovaaks. It will automatically queue up the next scenario to make sure you focus on your weak points and spend the right amount of time grinding each task.
 
+### TODO:
+1. Pull scores and save to file
+2. Deeplinks
+3. Basically make a normal playlist of benchmarks externally
+4. Make auto-benchmark, which scales the amount of times you play each benchmark
+5. Do all the complicated stuff to add in fundamental routines
+
 ### Goals:
 - It should effectively combine benchmarks with fundamental routines to target weakpoints.
 - It should repeat a task if you score within a percentage of your high score. We never want to stop right after setting a new high score. We want to spend as much time as we can improving, and switch tasks when we stop doing that to be efficient with our time
