@@ -1,6 +1,10 @@
 import sqlite3
+import os
 
-con = sqlite3.connect('klutch.bytes')
+AIMLAB_DB_PATH = os.path.abspath(os.path.join(os.getenv(
+    "APPDATA"), os.pardir, "LocalLow\\statespace\\aimlab_tb\\klutch.bytes"))
+
+con = sqlite3.connect(AIMLAB_DB_PATH)
 cur = con.cursor()
 res = cur.execute("SELECT taskName, score FROM TaskData")
 out = res.fetchall()
