@@ -23,3 +23,4 @@ This program is meant to solve some of the problems I have with the Voltaic benc
 - The same scenario can have different guidance so we can use the same scenario for working on different things
 - Multiple benchmarks can be used for the same category. So rather than doing novice until you've beat it and then moving to intermediate you'll do a combination of both and those scores are like combined somehow
 - Eventually I definitely should make custom scenarios for this.
+- Every run starts with a warmup, and the difficulty of the warmup changes very quickly(run to run) to make sure to warm up within our skill level
