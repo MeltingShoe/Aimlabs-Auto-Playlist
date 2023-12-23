@@ -1,0 +1,34 @@
+static reflex
+    benchmarks
+        big
+            name:name
+            id:id
+            const:0
+            lowbound:0.05
+            highbound:0.8
+            decay:0.25
+        medium
+            name:name
+            id:id
+            const:0
+            lowbound:0.05
+            highbound:0.8
+            decay:0.25
+    tasks
+        medium
+            name:name
+            id:id
+            const:0
+            lowbound:0.05
+            highbound:0.8
+            decay:0.25
+    filters
+        task
+            an array
+        bm
+            an array
+    functions
+        when to pick bm function
+        task performance function
+        bm performance function
+

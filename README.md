@@ -10,6 +10,8 @@ This program is meant to solve some of the problems I have with the Voltaic benc
 6. Add a UI
 
 ### Goals:
+- Score could be (high score + last 5/10 average)/2 or something. 
+- Changes the playlist based on how often you train. If it's been a while you should do benchmarks. If you trained yesterday then we can just do fundamentals based on how you did.
 - Forces you to take breaks!
 - It should effectively combine benchmarks with fundamental routines to target weakpoints.
 - It should repeat a task if you score within a percentage of your high score. We never want to stop right after setting a new high score. We want to spend as much time as we can improving, and switch tasks when we stop doing that to be efficient with our time

@@ -6,6 +6,6 @@ AIMLAB_DB_PATH = os.path.abspath(os.path.join(os.getenv(
 
 con = sqlite3.connect(AIMLAB_DB_PATH)
 cur = con.cursor()
-res = cur.execute("SELECT taskName, score FROM TaskData")
+res = cur.execute("SELECT * FROM TaskData")
 out = res.fetchall()
 print(out)
