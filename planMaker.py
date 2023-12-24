@@ -1,9 +1,9 @@
-
+import yaml
 import math
-
+import matplotlib.pyplot as plt
 taskCategories = ['static', 'target acquisition', 'follow up', 'speed dynamic clicking', 'evasive dynamic clicking',
                   'smooth tracking', 'precise tracking', 'reactive tracking', 'speed target switching', 'evasive target switching']
-taskVariations = ['normal', 'wide', 'hall', 'incline']
+taskVariations = ['normal', 'close', 'far', 'incline']
 
 # you can just add shit without thinking about structure and separate it out later it'll be fine trust
 
@@ -104,25 +104,85 @@ class task:
         return self.scenarioList[y][x]
 
 
-testTask = task(5, 5, 5)
-testTask.setScenario(0, 1, 'hewwo', 420)
-testTask.setScenario(1, 2, 'colonthreee', 69)
-print(testTask.scenarioList)
+class dictFactory:
+    def __init__(self):
+        print('constant to add?')
+        self.constAdder = input()
 
-i = 0
-testTask.getScenario(1, 2).lockValue = 0
-while i <= 12:
-    testTask.getScenario(1, 2).runs = i
-    print(testTask.getScenario(1, 2).runs,
-          testTask.getScenario(1, 2).getBaseWeight())
-    i += 1
+        self.runs = '0'
+        print('lockValue?')
+        self.lockValue = input()
 
-x = input('test\n')
-print(x)
+    def makeDict(self):
+        print('name?')
+        name = input()
+        print('ID?')
+        ID = input()
+        a = {
+            'name': name,
+            'ID': ID,
+            'constAdder': self.constAdder,
+            'runsSinceLast': self.runs,
+            'lockValue': self.lockValue
+        }
+        return a
+
+
+def makeTaskConfig():
+    print('task set name?')
+    taskName = input()
+    print('X?')
+    xNum = int(input())
+    print('Y?')
+    yNum = int(input())
+    print('number of benchmarks?')
+    bmNum = int(input())
+    print('lowbound?')
+    self.lowBound = input()
+    print('highBound?')
+    self.highBound = input()
+    print('max runs?')
+    self.maxRuns = input()
+    print('decay?')
+    self.runDecay = input()
+    factory = dictFactory()
+    bms = []
+    print('Enter benchmarks')
+    for i in range(bmNum):
+        bms.append(factory.makeDict())
+    tasks = []
+    print('Enter training tasks')
+    for i in range(yNum):
+        row = []
+        for j in range(xNum):
+            row.append(factory.makeDict())
+        tasks.append(row)
+    a = {
+        'taskName': taskName,
+        'benchmarks': bms,
+        'trainingTasks': tasks,
+        'lowBound': self.lowBound,
+        'highBound': self.highBound,
+        'maxRuns': self.maxRuns,
+        'runDecay': self.runDecay,
+    }
+    fName = taskName + '.yaml'
+    file = open(fName, "w")
+    yaml.dump(a, file)
+    file.close()
+    return a
+
 
 # make console UI for config creation
 # first it asks for default values for stuff like lowbound and decay, a name for the task set, and the x/y and number of benchmarks
 # then you can select the x/y of a task and then modify all of it's values
 # for each set we'll need to be able to choose the performance metric function for the benchmark and training tasks
 # we also define convolutions for the benchmarks and tasks
-# once we can do all that we add a GUaaaaafI
+# once we can do all that we add a GUI
+# connections between task types propagate the convolution to a different task set
+# for each connection you define a scalar and the row to start propagating.
+# so you could make weak connections or connections which only start to affect the next task once you're towards the bottom
+# maybe you can also define a different filter pattern to apply IDK
+# we should probably add a confidence factor that defines how big the steps we take are
+# could save everything in sqlite since we have to use it anyway, using a full on db is prolly extra tho
+o
