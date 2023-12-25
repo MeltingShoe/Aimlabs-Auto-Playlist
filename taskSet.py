@@ -1,11 +1,13 @@
 from functionGenerator import func as func
 from numpy.random import choice
 import random
+import yaml
 
 
 class task:
 
     def __init__(self, config):
+        self.taskSetName = config['taskSetName']
         self.BMs = config['benchmarks']
         self.trainers = config['trainers']
         self.trainWeightFunc = func(config['trainWeightFunc'])
@@ -323,7 +325,7 @@ def printConv(conv):
     for row in conv:
         line = ' | '
         for w in row:
-            #w = w/total
+            # w = w/total
             w = w*1000
             w = w//1
             w = str(int(w))
@@ -335,8 +337,9 @@ def printConv(conv):
     print(out)
 
 
-def main():
+def resetConfig():
     exampleConfig = {
+        'taskSetName': 'reflex shot',
         'benchmarks': [{'name': 'bm0', 'ID': '1', 'y': -1, 'x': 0}, {'name': 'bm1', 'ID': '2', 'y': -1, 'x': 1}, {'name': 'bm2', 'ID': '3', 'y': -1, 'x': 2}, {'name': 'bm3', 'ID': '4', 'y': -1, 'x': 3}, {'name': 'bm4', 'ID': '5', 'y': -1, 'x': 4}],
         'trainers': [[{'name': '00', 'ID': '6', 'lockVal': '0', 'x': 0, 'y': 0}, {'name': '10', 'ID': '7', 'lockVal': '0', 'x': 1, 'y': 0}, {'name': '20', 'ID': '8', 'lockVal': '0', 'x': 2, 'y': 0}, {'name': '30', 'ID': '9', 'lockVal': '-0.25', 'x': 3, 'y': 0}, {'name': '40', 'ID': '10', 'lockVal': '-0.5', 'x': 4, 'y': 0}],
                      [{'name': '01', 'ID': '11', 'lockVal': '-0.25', 'x': 0, 'y': 1}, {'name': '11', 'ID': '12', 'lockVal': '-0.25', 'x': 1, 'y': 1}, {'name': '21', 'ID': '13',
@@ -350,27 +353,50 @@ def main():
         'trainWeightFunc': {'inputRanges': [-1, -0.2, 0, 0.2, 1], 'outputRanges': [0.05, 1, 1, 1, 0.05], 'scales': [1, 1, 1, 1]},
         'xConvTrain': {'inputRanges': [-1, -0.4, 0, 1], 'outputRanges': [1.2, 1.2, 1, 0.75], 'scales': [0, 0, 1.5]},
         'yConvTrain': {'inputRanges': [-1, -0.4, 0, 1], 'outputRanges': [1.2, 1.2, 1, 0.75], 'scales': [0, 0, 1.5]},
-        'convTrainRange': 5,
+        'convTrainRange': 3,
         'decayTrain': {'inputRanges': [0, 1], 'outputRanges': [1, 0], 'scales': [0]},
-        'decayRange': 3,
+        'decayRange': 1,
         'decayBM': {'inputRanges': [0, 1], 'outputRanges': [0.05, 0.85], 'scales': [2]},
-        'maxIntervalBM': 10,
+        'maxIntervalBM': 15,
         'decayFunc': {'inputRanges': [0, 0.7, 1], 'outputRanges': [0, 1, 0.85], 'scales': [1, -1]},
-        'decayInterval': 10,
+        'decayInterval': 5,
         'xTrainScale': {'inputRanges': [-1, 0, 0.2, 0.4, 1], 'outputRanges': [1, 1, 0.7, 0.2, 0], 'scales': [0, 0, 0, 0]},
         'yTrainScale': {'inputRanges': [-1, 0, 0.2, 0.4, 1], 'outputRanges': [1, 1, 0.7, 0.2, 0], 'scales': [0, 0, 0, 0]},
-        'trainWeightRange': 5,
+        'trainWeightRange': 3,
         'performanceFunction': {'inputRanges': [0, 0.7, 0.75, 0.88, 0.92, 0.97], 'outputRanges': [-1, -1, -0.2, 0, 0.2, 1], 'scales': [0, 0, 0, 0, 0, 0, 0, 0, 0]},
-        'maxStep': 0.5
+        'maxStep': 0.6
     }
+    saveYAML(exampleConfig)
 
-    testTaskSet = task(exampleConfig)
+
+def saveYAML(config):
+    file = open("config.yaml", "w")
+    yaml.dump(config, file)
+    file.close()
+    print("YAML file saved.")
+
+
+def openYAML():
+
+    with open("config.yaml", "r") as stream:
+        try:
+            return yaml.safe_load(stream)
+        except yaml.YAMLError as exc:
+            print(exc)
+
+
+def main():
+    resetConfig()
+
+    config = openYAML()
+    testTaskSet = task(config)
     for i in range(100):
 
         selection = testTaskSet.chooseTask()
         print(selection)
-        acc = random.randint(800, 1000)/1000
-        print('acc', acc)
+        #acc = random.randint(800, 1000)/1000
+        #print('acc', acc)
+        acc = float(input())
         if selection['name'][0] != 'b':
             newWeights = testTaskSet.processOutput(
                 acc, selection['x'], selection['y'])
