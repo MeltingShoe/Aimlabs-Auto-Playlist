@@ -1,25 +1,30 @@
 benchmarks:
 - ID: '1'
   name: bm0
+  scores: []
   x: 0
   y: -1
 - ID: '2'
   name: bm1
+  scores: []
   x: 1
   y: -1
 - ID: '3'
   name: bm2
+  scores: []
   x: 2
   y: -1
 - ID: '4'
   name: bm3
+  scores: []
   x: 3
   y: -1
 - ID: '5'
   name: bm4
+  scores: []
   x: 4
   y: -1
-convTrainRange: 3
+convTrainRange: 4
 decayBM:
   inputRanges:
   - 0
@@ -124,7 +129,7 @@ trainWeightFunc:
   - 1
   - 1
   - 1
-trainWeightRange: 3
+trainWeightRange: 4
 trainers:
 - - ID: '6'
     lockVal: '0'
@@ -132,122 +137,122 @@ trainers:
     x: 0
     y: 0
   - ID: '7'
-    lockVal: '0'
+    lockVal: 0
     name: '10'
     x: 1
     y: 0
   - ID: '8'
-    lockVal: '0'
+    lockVal: 0
     name: '20'
     x: 2
     y: 0
   - ID: '9'
-    lockVal: '-0.25'
+    lockVal: -0.25
     name: '30'
     x: 3
     y: 0
   - ID: '10'
-    lockVal: '-0.5'
+    lockVal: -0.5
     name: '40'
     x: 4
     y: 0
 - - ID: '11'
-    lockVal: '-0.25'
+    lockVal: -0.25
     name: '01'
     x: 0
     y: 1
   - ID: '12'
-    lockVal: '-0.25'
+    lockVal: -0.25
     name: '11'
     x: 1
     y: 1
   - ID: '13'
-    lockVal: '-0.25'
+    lockVal: -0.25
     name: '21'
     x: 2
     y: 1
   - ID: ''
-    lockVal: '-0.5'
+    lockVal: -0.5
     name: '31'
     x: 3
     y: 1
   - ID: '15'
-    lockVal: '-0.5'
+    lockVal: -0.5
     name: '41'
     x: 4
     y: 1
 - - ID: '16'
-    lockVal: '-0.5'
+    lockVal: -0.5
     name: '02'
     x: 0
     y: 2
   - ID: '17'
-    lockVal: '-0.5'
+    lockVal: -0.5
     name: '12'
     x: 1
     y: 2
   - ID: '18'
-    lockVal: '-0.5'
+    lockVal: -0.5
     name: '22'
     x: 2
     y: 2
   - ID: '19'
-    lockVal: '-1'
+    lockVal: -1
     name: '32'
     x: 3
     y: 2
   - ID: '20'
-    lockVal: '-1'
+    lockVal: -1
     name: '42'
     x: 4
     y: 2
 - - ID: '21'
-    lockVal: '-1'
+    lockVal: -1
     name: '03'
     x: 0
     y: 3
   - ID: '22'
-    lockVal: '-1'
+    lockVal: -1
     name: '13'
     x: 1
     y: 3
   - ID: '23'
-    lockVal: '-1'
+    lockVal: -1
     name: '23'
     x: 2
     y: 3
   - ID: '24'
-    lockVal: '-1'
+    lockVal: -1
     name: '33'
     x: 3
     y: 3
   - ID: '25'
-    lockVal: '-1'
+    lockVal: -1
     name: '43'
     x: 4
     y: 3
 - - ID: '26'
-    lockVal: '-1'
+    lockVal: -1
     name: '04'
     x: 0
     y: 4
   - ID: '27'
-    lockVal: '-1'
+    lockVal: -1
     name: '14'
     x: 1
     y: 4
   - ID: '28'
-    lockVal: '-1'
+    lockVal: -1
     name: '24'
     x: 2
     y: 4
   - ID: '29'
-    lockVal: '-1'
+    lockVal: -1
     name: '34'
     x: 3
     y: 4
   - ID: '30'
-    lockVal: '-1'
+    lockVal: -1
     name: '44'
     x: 4
     y: 4

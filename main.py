@@ -1,6 +1,7 @@
 import sqlite3
 import os
 from functionGenerator import func as func
+import webbrowser
 
 exampleDefinition2 = {
     'inputRanges': [-1, -0.3, 0, 0.3, 1],
@@ -9,8 +10,15 @@ exampleDefinition2 = {
 }
 
 f = func(exampleDefinition2)
+#aimlab://workshop?id=2801883868
+# f.plotFunction()
 
-f.plotFunction()
+testID = 3129171043
+def launchTask(ID=3129171043):
+    url = 'aimlab://workshop?id='
+    url += str(ID)
+    webbrowser.open(url)
+
 
 AIMLAB_DB_PATH = os.path.abspath(os.path.join(os.getenv(
     "APPDATA"), os.pardir, "LocalLow\\statespace\\aimlab_tb\\klutch.bytes"))
@@ -20,3 +28,4 @@ cur = con.cursor()
 res = cur.execute("SELECT * FROM TaskData")
 out = res.fetchall()
 print(out)
+launchTask(ID=testID)

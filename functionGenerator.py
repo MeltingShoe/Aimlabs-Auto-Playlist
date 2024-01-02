@@ -7,6 +7,10 @@ class func:
         self.definition = definition
         self.inputRanges = definition['inputRanges']
         self.outputRanges = definition['outputRanges']
+        if abs(self.inputRanges[0]) > 1 or abs(self.inputRanges[-1]) > 1:
+            divisor = abs(max(self.inputRanges, key=abs))
+            for item in self.inputRanges:
+                item = item / divisor
         self.scales = definition['scales']
 
     def plotFunction(self, samples=1000, oversamples=100):
@@ -117,8 +121,10 @@ class func:
 
 
 def main():
-    exampleDefinition2 = {'inputRanges': [0, 0.7, 0.75, 0.88, 0.92, 0.97], 'outputRanges': [
-        -1, -1, -0.2, 0, 0.2, 1], 'scales': [0, 0, 0, 0, 0, 0, 0, 0, 0]}
+    exampleDefinition2 = {'inputRanges': [-0.9, -0.7, 0, 0.3, 0.9],
+                          'outputRanges': [0, 0.2, 0.3, 0.8, 0.1],
+                          'scales': [2, -2, 0.5, -1.5, 11]
+                          }
 
     f = func(exampleDefinition2)
 

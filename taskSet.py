@@ -7,6 +7,7 @@ import yaml
 class task:
 
     def __init__(self, config):
+        self.debugPrints = True
         self.taskSetName = config['taskSetName']
         self.BMs = config['benchmarks']
         self.trainers = config['trainers']
@@ -273,10 +274,49 @@ class task:
             out.append(line)
         return out
 
+    # TODO, this. it's just a temp function so we can manually plug in accuracy values
+    def pFunction(self, taskData):
+        return float(taskData)
+
+    def fixedTuning(self, taskData, x, y):
+        """the old tuning algorithm was wrong and bad and not expandable
+        this algorithm takes in all the task data to make it easier to just define new functions in here as the task performance metric
+        we also take the calculated performance, compare it to the lockValue at x,y, and then multiply that by step value
+        in the old alg we calculated this step for every square which made no sense cuz we had to approximate score
+        now we just take this calculated step and multiply it by all our weights and then add it to each value
+        we also need to either return a single number for the calculated output mask, or a full matrix of all the weighted step values
+        this way we can calculate the propagation for all our connections
+        we'll have to make function to take that input
+        also down the line we need to fix the decay function, that might just be tuning who knows
+        """
+
+        performance = self.pFunction(taskData)
+        base = float(self.trainers[y][x]['lockVal'])
+        baseStep = performance - base
+        step = baseStep * self.maxStep
+        weightMatrix = self.warpWeights(x, y)
+        stepMatrix = []
+        for row in weightMatrix:
+            line = []
+            for weight in row:
+                line.append(step * weight)
+            stepMatrix.append(line)
+        for i in range(0, len(self.trainers)):
+            for j in range(0, len(self.trainers[0])):
+                self.trainers[i][j]['lockVal'] += stepMatrix[i][j]
+                if self.trainers[i][j]['lockVal'] > 1:
+                    self.trainers[i][j]['lockVal'] = 1
+                elif self.trainers[i][j]['lockVal'] < -1:
+                    self.trainers[i][j]['lockVal'] = -1
+        return stepMatrix
+
     def stepWeight(self, base, target, weight):
         total = target - float(base)
         step = total*self.maxStep
-        step = step * weight
+        if (step > 0 and weight > 0) or (step <= 0 and weight <= 0):
+            step = step * weight
+        else:
+            step = 0
         out = float(base) + step
         return out
 
@@ -336,24 +376,17 @@ def printConv(conv):
         out += line
     print(out)
 
-
+'''
 def resetConfig():
     exampleConfig = {
         'taskSetName': 'reflex shot',
-        'benchmarks': [{'name': 'bm0', 'ID': '1', 'y': -1, 'x': 0}, {'name': 'bm1', 'ID': '2', 'y': -1, 'x': 1}, {'name': 'bm2', 'ID': '3', 'y': -1, 'x': 2}, {'name': 'bm3', 'ID': '4', 'y': -1, 'x': 3}, {'name': 'bm4', 'ID': '5', 'y': -1, 'x': 4}],
-        'trainers': [[{'name': '00', 'ID': '6', 'lockVal': '0', 'x': 0, 'y': 0}, {'name': '10', 'ID': '7', 'lockVal': '0', 'x': 1, 'y': 0}, {'name': '20', 'ID': '8', 'lockVal': '0', 'x': 2, 'y': 0}, {'name': '30', 'ID': '9', 'lockVal': '-0.25', 'x': 3, 'y': 0}, {'name': '40', 'ID': '10', 'lockVal': '-0.5', 'x': 4, 'y': 0}],
-                     [{'name': '01', 'ID': '11', 'lockVal': '-0.25', 'x': 0, 'y': 1}, {'name': '11', 'ID': '12', 'lockVal': '-0.25', 'x': 1, 'y': 1}, {'name': '21', 'ID': '13',
-                                                                                                                                                       'lockVal': '-0.25', 'x': 2, 'y': 1}, {'name': '31', 'ID': '', 'lockVal': '-0.5', 'x': 3, 'y': 1}, {'name': '41', 'ID': '15', 'lockVal': '-0.5', 'x': 4, 'y': 1}],
-                     [{'name': '02', 'ID': '16', 'lockVal': '-0.5', 'x': 0, 'y': 2}, {'name': '12', 'ID': '17', 'lockVal': '-0.5', 'x': 1, 'y': 2}, {'name': '22', 'ID': '18',
-                                                                                                                                                     'lockVal': '-0.5', 'x': 2, 'y': 2}, {'name': '32', 'ID': '19', 'lockVal': '-1', 'x': 3, 'y': 2}, {'name': '42', 'ID': '20', 'lockVal': '-1', 'x': 4, 'y': 2}],
-                     [{'name': '03', 'ID': '21', 'lockVal': '-1', 'x': 0, 'y': 3}, {'name': '13', 'ID': '22', 'lockVal': '-1', 'x': 1, 'y': 3}, {'name': '23', 'ID': '23',
-                                                                                                                                                 'lockVal': '-1', 'x': 2, 'y': 3}, {'name': '33', 'ID': '24', 'lockVal': '-1', 'x': 3, 'y': 3}, {'name': '43', 'ID': '25', 'lockVal': '-1', 'x': 4, 'y': 3}],
-                     [{'name': '04', 'ID': '26', 'lockVal': '-1', 'x': 0, 'y': 4}, {'name': '14', 'ID': '27', 'lockVal': '-1', 'x': 1, 'y': 4}, {'name': '24', 'ID': '28', 'lockVal': '-1', 'x': 2, 'y': 4}, {'name': '34', 'ID': '29', 'lockVal': '-1', 'x': 3, 'y': 4}, {'name': '44', 'ID': '30', 'lockVal': '-1', 'x': 4, 'y': 4}]],
+        'BMs': [{'name': 'pop 0.9T', 'ID': 'aaa'}, {'name': 'pop 0.65T', 'ID': 'aaa'}, {'name': 'pop 0.45T', 'ID': 'aaa'}, {'name': 'pop 0.3T', 'ID': 'aaa'}, {'name': 'pop 0.2T', 'ID': 'aaa'}],
+        'trainers': [[{'name': 'pop 0.9R 7T', 'ID': 'aaa', 'lockVal': '0', 'x': 0, 'y': 0}, {'name': 'pop 0.65R 7T', 'ID': 'aaa', 'lockVal': '0', 'x': 1, 'y': 0}, {'name': 'pop 0.45R 7T', 'ID': 'aaa', 'lockVal': '0', 'x': 2, 'y': 0}, {'name': 'pop 0.3R 7T', 'ID': 'aaa', 'lockVal': '0', 'x': 3, 'y': 0}, {'name': 'pop 0.2R 7T', 'ID': 'aaa', 'lockVal': '-0.25', 'x': 4, 'y': 0}], [{'name': 'pop 0.9R 6T', 'ID': 'aaa', 'lockVal': '0', 'x': 0, 'y': 1}, {'name': 'pop 0.65R 6T', 'ID': 'aaa', 'lockVal': '-0.25', 'x': 1, 'y': 1}, {'name': 'pop 0.45R 6T', 'ID': 'aaa', 'lockVal': '-0.5', 'x': 2, 'y': 1}, {'name': 'pop 0.3R 6T', 'ID': 'aaa', 'lockVal': '-0.75', 'x': 3, 'y': 1}, {'name': 'pop 0.2R 6T', 'ID': 'aaa', 'lockVal': '-0.75', 'x': 4, 'y': 1}], [{'name': 'pop 0.9R 5T', 'ID': 'aaa', 'lockVal': '-0.5', 'x': 0, 'y': 2}, {'name': 'pop 0.65R 5T', 'ID': 'aaa', 'lockVal': '-0.75', 'x': 1, 'y': 2}, {'name': 'pop 0.45R 5T', 'ID': 'aaa', 'lockVal': '-1', 'x': 2, 'y': 2}, {'name': 'pop 0.3R 5T', 'ID': 'aaa', 'lockVal': '-1', 'x': 3, 'y': 2}, {'name': 'pop 0.2R 5T', 'ID': 'aaa', 'lockVal': '-1', 'x': 4, 'y': 2}], [{'name': 'pop 0.9R 4T', 'ID': 'aaa', 'lockVal': '-1', 'x': 0, 'y': 3}, {'name': 'pop 0.65R 4T', 'ID': 'aaa', 'lockVal': '-1', 'x': 1, 'y': 3}, {'name': 'pop 0.45R 4T', 'ID': 'aaa', 'lockVal': '-1', 'x': 2, 'y': 3}, {'name': 'pop 0.3R 4T', 'ID': 'aaa', 'lockVal': '-1', 'x': 3, 'y': 3}, {'name': 'pop 0.2R 4T', 'ID': 'aaa', 'lockVal': '-1', 'x': 4, 'y': 3}], [{'name': 'pop 0.9R 3T', 'ID': 'aaa', 'lockVal': '-1', 'x': 0, 'y': 4}, {'name': 'pop 0.65R 3T', 'ID': 'aaa', 'lockVal': '-1', 'x': 1, 'y': 4}, {'name': 'pop 0.45R 3T', 'ID': 'aaa', 'lockVal': '-1', 'x': 2, 'y': 4}, {'name': 'pop 0.3R 3T', 'ID': 'aaa', 'lockVal': '-1', 'x': 3, 'y': 4}, {'name': 'pop 0.2R 3T', 'ID': 'aaa', 'lockVal': '-1', 'x': 4, 'y': 4}]]
         'propagateMask': [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0.5], [0, 0, 0, 0.5, 1], [0.5, 0.5, 0.5, 1, 1], [1, 1, 1, 1, 1]],
         'trainWeightFunc': {'inputRanges': [-1, -0.2, 0, 0.2, 1], 'outputRanges': [0.05, 1, 1, 1, 0.05], 'scales': [1, 1, 1, 1]},
         'xConvTrain': {'inputRanges': [-1, -0.4, 0, 1], 'outputRanges': [1.2, 1.2, 1, 0.75], 'scales': [0, 0, 1.5]},
         'yConvTrain': {'inputRanges': [-1, -0.4, 0, 1], 'outputRanges': [1.2, 1.2, 1, 0.75], 'scales': [0, 0, 1.5]},
-        'convTrainRange': 3,
+        'convTrainRange': 4,
         'decayTrain': {'inputRanges': [0, 1], 'outputRanges': [1, 0], 'scales': [0]},
         'decayRange': 1,
         'decayBM': {'inputRanges': [0, 1], 'outputRanges': [0.05, 0.85], 'scales': [2]},
@@ -362,11 +395,12 @@ def resetConfig():
         'decayInterval': 5,
         'xTrainScale': {'inputRanges': [-1, 0, 0.2, 0.4, 1], 'outputRanges': [1, 1, 0.7, 0.2, 0], 'scales': [0, 0, 0, 0]},
         'yTrainScale': {'inputRanges': [-1, 0, 0.2, 0.4, 1], 'outputRanges': [1, 1, 0.7, 0.2, 0], 'scales': [0, 0, 0, 0]},
-        'trainWeightRange': 3,
+        'trainWeightRange': 4,
         'performanceFunction': {'inputRanges': [0, 0.7, 0.75, 0.88, 0.92, 0.97], 'outputRanges': [-1, -1, -0.2, 0, 0.2, 1], 'scales': [0, 0, 0, 0, 0, 0, 0, 0, 0]},
         'maxStep': 0.6
     }
     saveYAML(exampleConfig)
+'''
 
 
 def saveYAML(config):
@@ -386,19 +420,17 @@ def openYAML():
 
 
 def main():
-    resetConfig()
-
+    #resetConfig()
     config = openYAML()
     testTaskSet = task(config)
     for i in range(100):
-
         selection = testTaskSet.chooseTask()
         print(selection)
         #acc = random.randint(800, 1000)/1000
         #print('acc', acc)
         acc = float(input())
         if selection['name'][0] != 'b':
-            newWeights = testTaskSet.processOutput(
+            newWeights = testTaskSet.fixedTuning(
                 acc, selection['x'], selection['y'])
             printConv(newWeights)
 
