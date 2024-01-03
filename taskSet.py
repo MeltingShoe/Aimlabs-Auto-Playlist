@@ -1,8 +1,9 @@
 from functionGenerator import func as func
 from numpy.random import choice
 import random
-import yaml
 
+from utils import saveYAML 
+from utils import openYAML 
 
 class task:
 
@@ -381,7 +382,7 @@ def resetConfig():
     exampleConfig = {
         'taskSetName': 'reflex shot',
         'BMs': [{'name': 'pop 0.9T', 'ID': 'aaa'}, {'name': 'pop 0.65T', 'ID': 'aaa'}, {'name': 'pop 0.45T', 'ID': 'aaa'}, {'name': 'pop 0.3T', 'ID': 'aaa'}, {'name': 'pop 0.2T', 'ID': 'aaa'}],
-        'trainers': [[{'name': 'pop 0.9R 7T', 'ID': 'aaa', 'lockVal': '0', 'x': 0, 'y': 0}, {'name': 'pop 0.65R 7T', 'ID': 'aaa', 'lockVal': '0', 'x': 1, 'y': 0}, {'name': 'pop 0.45R 7T', 'ID': 'aaa', 'lockVal': '0', 'x': 2, 'y': 0}, {'name': 'pop 0.3R 7T', 'ID': 'aaa', 'lockVal': '0', 'x': 3, 'y': 0}, {'name': 'pop 0.2R 7T', 'ID': 'aaa', 'lockVal': '-0.25', 'x': 4, 'y': 0}], [{'name': 'pop 0.9R 6T', 'ID': 'aaa', 'lockVal': '0', 'x': 0, 'y': 1}, {'name': 'pop 0.65R 6T', 'ID': 'aaa', 'lockVal': '-0.25', 'x': 1, 'y': 1}, {'name': 'pop 0.45R 6T', 'ID': 'aaa', 'lockVal': '-0.5', 'x': 2, 'y': 1}, {'name': 'pop 0.3R 6T', 'ID': 'aaa', 'lockVal': '-0.75', 'x': 3, 'y': 1}, {'name': 'pop 0.2R 6T', 'ID': 'aaa', 'lockVal': '-0.75', 'x': 4, 'y': 1}], [{'name': 'pop 0.9R 5T', 'ID': 'aaa', 'lockVal': '-0.5', 'x': 0, 'y': 2}, {'name': 'pop 0.65R 5T', 'ID': 'aaa', 'lockVal': '-0.75', 'x': 1, 'y': 2}, {'name': 'pop 0.45R 5T', 'ID': 'aaa', 'lockVal': '-1', 'x': 2, 'y': 2}, {'name': 'pop 0.3R 5T', 'ID': 'aaa', 'lockVal': '-1', 'x': 3, 'y': 2}, {'name': 'pop 0.2R 5T', 'ID': 'aaa', 'lockVal': '-1', 'x': 4, 'y': 2}], [{'name': 'pop 0.9R 4T', 'ID': 'aaa', 'lockVal': '-1', 'x': 0, 'y': 3}, {'name': 'pop 0.65R 4T', 'ID': 'aaa', 'lockVal': '-1', 'x': 1, 'y': 3}, {'name': 'pop 0.45R 4T', 'ID': 'aaa', 'lockVal': '-1', 'x': 2, 'y': 3}, {'name': 'pop 0.3R 4T', 'ID': 'aaa', 'lockVal': '-1', 'x': 3, 'y': 3}, {'name': 'pop 0.2R 4T', 'ID': 'aaa', 'lockVal': '-1', 'x': 4, 'y': 3}], [{'name': 'pop 0.9R 3T', 'ID': 'aaa', 'lockVal': '-1', 'x': 0, 'y': 4}, {'name': 'pop 0.65R 3T', 'ID': 'aaa', 'lockVal': '-1', 'x': 1, 'y': 4}, {'name': 'pop 0.45R 3T', 'ID': 'aaa', 'lockVal': '-1', 'x': 2, 'y': 4}, {'name': 'pop 0.3R 3T', 'ID': 'aaa', 'lockVal': '-1', 'x': 3, 'y': 4}, {'name': 'pop 0.2R 3T', 'ID': 'aaa', 'lockVal': '-1', 'x': 4, 'y': 4}]]
+        'trainers': [[{'name': 'pop 0.9R 7T', 'ID': 'aaa', 'lockVal': 0, 'x': 0, 'y': 0}, {'name': 'pop 0.65R 7T', 'ID': 'aaa', 'lockVal': 0, 'x': 1, 'y': 0}, {'name': 'pop 0.45R 7T', 'ID': 'aaa', 'lockVal': 0, 'x': 2, 'y': 0}, {'name': 'pop 0.3R 7T', 'ID': 'aaa', 'lockVal': 0, 'x': 3, 'y': 0}, {'name': 'pop 0.2R 7T', 'ID': 'aaa', 'lockVal': -0.25, 'x': 4, 'y': 0}], [{'name': 'pop 0.9R 6T', 'ID': 'aaa', 'lockVal': '0', 'x': 0, 'y': 1}, {'name': 'pop 0.65R 6T', 'ID': 'aaa', 'lockVal': '-0.25', 'x': 1, 'y': 1}, {'name': 'pop 0.45R 6T', 'ID': 'aaa', 'lockVal': '-0.5', 'x': 2, 'y': 1}, {'name': 'pop 0.3R 6T', 'ID': 'aaa', 'lockVal': '-0.75', 'x': 3, 'y': 1}, {'name': 'pop 0.2R 6T', 'ID': 'aaa', 'lockVal': '-0.75', 'x': 4, 'y': 1}], [{'name': 'pop 0.9R 5T', 'ID': 'aaa', 'lockVal': '-0.5', 'x': 0, 'y': 2}, {'name': 'pop 0.65R 5T', 'ID': 'aaa', 'lockVal': '-0.75', 'x': 1, 'y': 2}, {'name': 'pop 0.45R 5T', 'ID': 'aaa', 'lockVal': '-1', 'x': 2, 'y': 2}, {'name': 'pop 0.3R 5T', 'ID': 'aaa', 'lockVal': '-1', 'x': 3, 'y': 2}, {'name': 'pop 0.2R 5T', 'ID': 'aaa', 'lockVal': '-1', 'x': 4, 'y': 2}], [{'name': 'pop 0.9R 4T', 'ID': 'aaa', 'lockVal': '-1', 'x': 0, 'y': 3}, {'name': 'pop 0.65R 4T', 'ID': 'aaa', 'lockVal': '-1', 'x': 1, 'y': 3}, {'name': 'pop 0.45R 4T', 'ID': 'aaa', 'lockVal': '-1', 'x': 2, 'y': 3}, {'name': 'pop 0.3R 4T', 'ID': 'aaa', 'lockVal': '-1', 'x': 3, 'y': 3}, {'name': 'pop 0.2R 4T', 'ID': 'aaa', 'lockVal': '-1', 'x': 4, 'y': 3}], [{'name': 'pop 0.9R 3T', 'ID': 'aaa', 'lockVal': '-1', 'x': 0, 'y': 4}, {'name': 'pop 0.65R 3T', 'ID': 'aaa', 'lockVal': '-1', 'x': 1, 'y': 4}, {'name': 'pop 0.45R 3T', 'ID': 'aaa', 'lockVal': '-1', 'x': 2, 'y': 4}, {'name': 'pop 0.3R 3T', 'ID': 'aaa', 'lockVal': '-1', 'x': 3, 'y': 4}, {'name': 'pop 0.2R 3T', 'ID': 'aaa', 'lockVal': '-1', 'x': 4, 'y': 4}]]
         'propagateMask': [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0.5], [0, 0, 0, 0.5, 1], [0.5, 0.5, 0.5, 1, 1], [1, 1, 1, 1, 1]],
         'trainWeightFunc': {'inputRanges': [-1, -0.2, 0, 0.2, 1], 'outputRanges': [0.05, 1, 1, 1, 0.05], 'scales': [1, 1, 1, 1]},
         'xConvTrain': {'inputRanges': [-1, -0.4, 0, 1], 'outputRanges': [1.2, 1.2, 1, 0.75], 'scales': [0, 0, 1.5]},
@@ -399,24 +400,10 @@ def resetConfig():
         'performanceFunction': {'inputRanges': [0, 0.7, 0.75, 0.88, 0.92, 0.97], 'outputRanges': [-1, -1, -0.2, 0, 0.2, 1], 'scales': [0, 0, 0, 0, 0, 0, 0, 0, 0]},
         'maxStep': 0.6
     }
-    saveYAML(exampleConfig)
-'''
+    saveYAML(exampleConfig)'''
 
 
-def saveYAML(config):
-    file = open("config.yaml", "w")
-    yaml.dump(config, file)
-    file.close()
-    print("YAML file saved.")
 
-
-def openYAML():
-
-    with open("config.yaml", "r") as stream:
-        try:
-            return yaml.safe_load(stream)
-        except yaml.YAMLError as exc:
-            print(exc)
 
 
 def main():
