@@ -2,8 +2,9 @@ from functionGenerator import func as func
 from numpy.random import choice
 import random
 
-from utils import saveYAML 
-from utils import openYAML 
+from utils import saveYAML
+from utils import openYAML
+
 
 class task:
 
@@ -377,6 +378,7 @@ def printConv(conv):
         out += line
     print(out)
 
+
 '''
 def resetConfig():
     exampleConfig = {
@@ -400,15 +402,12 @@ def resetConfig():
         'performanceFunction': {'inputRanges': [0, 0.7, 0.75, 0.88, 0.92, 0.97], 'outputRanges': [-1, -1, -0.2, 0, 0.2, 1], 'scales': [0, 0, 0, 0, 0, 0, 0, 0, 0]},
         'maxStep': 0.6
     }
-    saveYAML(exampleConfig)'''
-
-
-
+    saveYAML(exampleConfig,'config.yaml')'''
 
 
 def main():
-    #resetConfig()
-    config = openYAML()
+    # resetConfig()
+    config = openYAML('config.yaml')
     testTaskSet = task(config)
     for i in range(100):
         selection = testTaskSet.chooseTask()
