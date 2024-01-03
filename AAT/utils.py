@@ -1,15 +1,15 @@
 import yaml
 
-def saveYAML(config):
-    file = open("config.yaml", "w")
+def saveYAML(config,path="config.yaml"):
+    file = open(path, "w")
     yaml.dump(config, file)
     file.close()
     print("YAML file saved.")
 
 
-def openYAML():
+def openYAML(path="config.yaml"):
 
-    with open("config.yaml", "r") as stream:
+    with open(path, "r") as stream:
         try:
             return yaml.safe_load(stream)
         except yaml.YAMLError as exc:
