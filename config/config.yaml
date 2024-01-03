@@ -1,0 +1,264 @@
+benchmarks:
+- ID: 3129171986
+  difficulty: BM
+  name: CsLevel.meltingshoe.AAT 1W6T.S6MCVE
+  size: '0.9'
+  x: 0
+  y: -1
+  scores: []
+- ID: 3129171790
+  difficulty: BM
+  name: CsLevel.meltingshoe.AAT 1W6T.S6MCZH
+  size: '0.65'
+  x: 1
+  y: -1
+  scores: []
+- ID: 3129171473
+  difficulty: BM
+  name: CsLevel.meltingshoe.AAT 1W6T.S6MD23
+  size: '0.45'
+  x: 2
+  y: -1
+  scores: []
+- ID: 3129171252
+  difficulty: BM
+  name: CsLevel.meltingshoe.AAT 1W6T.S6MD4X
+  size: '0.3'
+  x: 3
+  y: -1
+  scores: []
+decayBM:
+  inputRanges:
+  - 0
+  - 1
+  outputRanges:
+  - 0.05
+  - 0.95
+  scales:
+  - 1.5
+convX:
+  inputRanges:
+  - -4
+  - 0
+  - 4
+  outputRanges:
+  - 1.25
+  - 1
+  - 0
+  scales:
+  - 0
+  - 1
+convY:
+  inputRanges:
+  - -4
+  - 0
+  - 4
+  outputRanges:
+  - 1.25
+  - 1
+  - 0
+  scales:
+  - 0
+  - 1
+performanceFunction:
+  inputRanges:
+  - 0
+  - 0.65
+  - 0.83
+  - 0.88
+  - 0.93
+  - 0.97
+  outputRanges:
+  - -1
+  - -1
+  - -0.2
+  - 0
+  - 0.2
+  - 1
+  scales:
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+maxIntervalBM: 12
+minChance: 0.03
+stepLen: 0.67
+scoreFunc: '1W6TPOP'
+taskSetName: '1W6TPOP'
+trainers:
+- - ID: 3129172995
+    difficulty: '7'
+    name: CsLevel.meltingshoe.AAT 1W6T.S6BU1E
+    size: '0.9'
+    x: 0
+    y: 0
+    lockVal: 0.5
+  - ID: 3129174000
+    difficulty: '7'
+    name: CsLevel.meltingshoe.AAT 1W6T.S6BT78
+    size: '0.65'
+    x: 1
+    y: 0
+    lockVal: 0.25
+  - ID: 3129175314
+    difficulty: '7'
+    name: CsLevel.meltingshoe.AAT 1W6T.S6BSNR
+    size: '0.45'
+    x: 2
+    y: 0
+    lockVal: 0
+  - ID: 3129176237
+    difficulty: '7'
+    name: CsLevel.meltingshoe.AAT 1W6T.S6BS24
+    size: '0.3'
+    x: 3
+    y: 0
+    lockVal: 0
+  - ID: 3129177052
+    difficulty: '7'
+    name: CsLevel.meltingshoe.1W6TPOP .S6BRCL
+    size: '0.2'
+    x: 4
+    y: 0
+    lockVal: -0.5
+- - ID: 3129172817
+    difficulty: '6'
+    name: CsLevel.meltingshoe.AAT 1W6T.S6BU75
+    size: '0.9'
+    x: 0
+    y: 1
+    lockVal: 0
+  - ID: 3129173783
+    difficulty: '6'
+    name: CsLevel.meltingshoe.AAT 1W6T.S6BTF3
+    size: '0.65'
+    x: 1
+    y: 1
+    lockVal: -0.5
+  - ID: 3129175134
+    difficulty: '6'
+    name: CsLevel.meltingshoe.AAT 1W6T.S6BSTE
+    size: '0.45'
+    x: 2
+    y: 1
+    lockVal: -0.5
+  - ID: 3129176105
+    difficulty: '6'
+    name: CsLevel.meltingshoe.AAT 1W6T.S6BS92
+    size: '0.3'
+    x: 3
+    y: 1
+    lockVal: -0.5
+  - ID: 3129177213
+    difficulty: '6'
+    name: CsLevel.meltingshoe.AAT 1W6T.S6BRLK
+    size: '0.2'
+    x: 4
+    y: 1
+    lockVal: -1.0
+- - ID: 3129172641
+    difficulty: '5'
+    name: CsLevel.meltingshoe.AAT 1W6T.S6BUBJ
+    size: '0.9'
+    x: 0
+    y: 2
+    lockVal: -1.0
+  - ID: 3129173604
+    difficulty: '5'
+    name: CsLevel.meltingshoe.AAT 1W6T.S6BTJR
+    size: '0.65'
+    x: 1
+    y: 2
+    lockVal: -1.0
+  - ID: 3129174953
+    difficulty: '5'
+    name: CsLevel.meltingshoe.AAT 1W6T.S6BSX0
+    size: '0.45'
+    x: 2
+    y: 2
+    lockVal: -1.0
+  - ID: 3129175882
+    difficulty: '5'
+    name: CsLevel.meltingshoe.AAT 1W6T.S6BSCZ
+    size: '0.3'
+    x: 3
+    y: 2
+    lockVal: -1.0
+  - ID: 3129176809
+    difficulty: '5'
+    name: CsLevel.meltingshoe.AAT 1W6T.S6BRVN
+    size: '0.2'
+    x: 4
+    y: 2
+    lockVal: -1.0
+- - ID: 3129172426
+    difficulty: '4'
+    name: CsLevel.meltingshoe.AAT 1W6T.S6BUF2
+    size: '0.9'
+    x: 0
+    y: 3
+    lockVal: -1.0
+  - ID: 3129173432
+    difficulty: '4'
+    name: CsLevel.meltingshoe.AAT 1W6T.S6BTS2
+    size: '0.65'
+    x: 1
+    y: 3
+    lockVal: -1.0
+  - ID: 3129174654
+    difficulty: '4'
+    name: CsLevel.meltingshoe.AAT 1W6T.S6BT0R
+    size: '0.45'
+    x: 2
+    y: 3
+    lockVal: -1.0
+  - ID: 3129175736
+    difficulty: '4'
+    name: CsLevel.meltingshoe.AAT 1W6T.S6BSH3
+    size: '0.3'
+    x: 3
+    y: 3
+    lockVal: -1.0
+  - ID: 3129176610
+    difficulty: '4'
+    name: CsLevel.meltingshoe.AAT 1W6T.S6BRYZ
+    size: '0.2'
+    x: 4
+    y: 3
+    lockVal: -1.0
+- - ID: 3129172220
+    difficulty: '3'
+    name: CsLevel.meltingshoe.AAT 1W6T.S6BUJC
+    size: '0.9'
+    x: 0
+    y: 4
+    lockVal: -1.0
+  - ID: 3129173174
+    difficulty: '3'
+    name: CsLevel.meltingshoe.AAT 1W6T.S6BTWX
+    size: '0.65'
+    x: 1
+    y: 4
+    lockVal: -1.0
+  - ID: 3129174362
+    difficulty: '3'
+    name: CsLevel.meltingshoe.AAT 1W6T.S6BT3R
+    size: '0.45'
+    x: 2
+    y: 4
+    lockVal: -1.0
+  - ID: 3129175516
+    difficulty: '3'
+    name: CsLevel.meltingshoe.AAT 1W6T.S6BSKR
+    size: '0.3'
+    x: 3
+    y: 4
+    lockVal: -1.0
+  - ID: 3129178670
+    difficulty: '3'
+    name: CsLevel.meltingshoe.AAT 1W6T.S6ME9M
+    size: '0.2'
+    x: 4
+    y: 4
+    lockVal: -1.0
