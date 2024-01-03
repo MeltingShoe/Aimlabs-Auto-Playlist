@@ -104,6 +104,7 @@ def parseTask():
                 val = item
                 val['x'] = x
                 val['y'] = y
+                val['scores'] = []
                 bms.append(val)
                 x += 1
     y += 1

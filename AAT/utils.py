@@ -33,6 +33,24 @@ class getScore:
         self.readDB()
         self.index = self.getLast()[0]
 
+    def getInitScores(self):
+        self.readDB()
+        names = []
+        for run in self.data:
+            name = run[3]
+            if 'meltingshoe' in name:
+                y = run[12]
+                y = ast.literal_eval(y)
+                out = {
+                    'name': name,
+                    'score': run[4],
+                    'data': y,
+                    'hits': y['hitsTotal'],
+                    'misses': y['missesTotal']
+                }
+                names.append(out)
+        return names
+
     def score(self):
         self.readDB()
         newIndex = self.getLast()[0]
