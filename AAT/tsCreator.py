@@ -78,12 +78,76 @@ def runIDs(newTask=True):
     saveYAML(taskConfig, 'tmpTaskConfig.yaml')
 
 
+def inputVals(prompt):
+    i = 0
+    out = []
+    while True:
+        print(i, prompt)
+        val = input()
+        if val == 'YES':
+            return out
+        out.append(val)
+        i += 1
+
+
+def parseTask():
+    data = openYAML('inputConfig.yaml')
+    sizes = inputVals('size?')
+    speeds = inputVals('speed?')
+    bms = []
+    trainers = []
+    x = 0
+    y = -1
+    for r in sizes:
+        for item in data:
+            if item['difficulty'] == 'BM' and item['size'] == r:
+                val = item
+                val['x'] = x
+                val['y'] = y
+                bms.append(val)
+                x += 1
+    y += 1
+    x = 0
+    for t in speeds:
+        line = []
+        x = 0
+        for r in sizes:
+            for item in data:
+                if item['difficulty'] == t and item['size'] == r:
+                    print('IN IT =====================================================')
+                    val = item
+
+                    val['x'] = x
+                    val['y'] = y
+
+                    print(val)
+
+                    line.append(val)
+                    x += 1
+
+        trainers.append(line)
+        y += 1
+    out = {
+        'BMs': bms,
+
+        'trainers': trainers
+    }
+    saveYAML(out, 'outputConfig.yaml')
+    print(out)
+
+
 def main():
+    p = YN('Parse task?')
+    if p:
+        parseTask()
+        print('we did it :)')
+        return True
     restart = YN('Start new task?')
     if restart:
         setIDs()
     runIDs(newTask=restart)
     print('config finished, exiting...')
+    return True
 
 
 if __name__ == '__main__':

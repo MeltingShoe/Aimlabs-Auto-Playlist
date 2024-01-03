@@ -1,9 +1,8 @@
-from functionGenerator import func as func
+from functionGenerator import func
 from numpy.random import choice
 import random
 
-from utils import saveYAML
-from utils import openYAML
+from utils import saveYAML, openYAML
 
 
 class task:
@@ -49,7 +48,7 @@ class task:
         ID = selection[0]['ID']
         x = selection[0]['x']
         y = selection[0]['y']
-        return {'name': name, 'ID': ID, 'x': x, 'y': y}
+        return {'name': name, 'ID': ID, 'x': x, 'y': y, 'size': selection[0]['size'], 'difficulty': selection[0]['difficulty']}
 
     def getFinalWeight(self):
         out = []
@@ -84,7 +83,7 @@ class task:
         name = selection[0]['name']
         ID = selection[0]['ID']
         self.subDecay(x, y)
-        return {'name': name, 'ID': ID, 'x': x, 'y': y}
+        return {'name': name, 'ID': ID, 'x': x, 'y': y, 'size': selection[0]['size'], 'difficulty': selection[0]['difficulty']}
 
     def addDecay(self):
         out = []
@@ -219,7 +218,9 @@ class task:
         ID = task['ID']
         x = task['x']
         y = task['y']
-        return {'name': name, 'ID': ID, 'x': x, 'y': y}
+        size = task['size']
+        difficulty = task['difficulty']
+        return {'name': name, 'ID': ID, 'x': x, 'y': y, 'size': size, 'difficulty': difficulty}
 
     def parseScore(self, acc):
         return self.performanceFunction.getOutput(acc)

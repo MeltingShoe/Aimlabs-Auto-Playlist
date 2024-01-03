@@ -13,6 +13,9 @@ class func:
                 item = item / divisor
         self.scales = definition['scales']
 
+    def __call__(self, x):
+        return self.getOutput(x)
+
     def plotFunction(self, samples=1000, oversamples=100):
 
         start = self.inputRanges[0]
@@ -121,9 +124,9 @@ class func:
 
 
 def main():
-    exampleDefinition2 = {'inputRanges': [-0.9, -0.7, 0, 0.3, 0.9],
-                          'outputRanges': [0, 0.2, 0.3, 0.8, 0.1],
-                          'scales': [2, -2, 0.5, -1.5, 11]
+    exampleDefinition2 = {'inputRanges': [0, 0.65, 0.83, 0.88, 0.93, 0.97],
+                          'outputRanges': [-1, -1, -0.2, 0, 0.2, 1],
+                          'scales': [0, 0, 0, 0, 0]
                           }
 
     f = func(exampleDefinition2)

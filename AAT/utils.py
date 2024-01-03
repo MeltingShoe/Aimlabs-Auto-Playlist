@@ -2,6 +2,7 @@ import yaml
 import os
 import sqlite3
 import webbrowser
+import ast
 
 
 def saveYAML(config, path):
@@ -41,13 +42,16 @@ class getScore:
         x = self.getLast()
 
         y = x[12]
+        y = ast.literal_eval(y)
         out = {
             'name': x[3],
             'score': x[4],
-            'data': y
+            'data': y,
+            'hits': y['hitsTotal'],
+            'misses': y['missesTotal']
         }
 
-        return (isNew, out)
+        return isNew, out
 
     def readDB(self):
         con = sqlite3.connect(self.dbPath)
