@@ -222,10 +222,8 @@ class task:
         difficulty = task['difficulty']
         return {'name': name, 'ID': ID, 'x': x, 'y': y, 'size': size, 'difficulty': difficulty}
 
-    def parseScore(self, acc):
-        return self.performanceFunction.getOutput(acc)
-
     # this calculates the matrix of scaled scores IE harder tasks target scores slightly lower
+
     def warpScore(self, score, x, y):
         out = []
         for i in range(0, len(self.trainers)):

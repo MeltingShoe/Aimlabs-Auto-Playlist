@@ -1,5 +1,5 @@
 from functionGenerator import func
-from utils import saveYAML, openYAML, launchTask, getScore
+from utils import saveYAML, openYAML, launchTask, scoreDB, rawDB
 import random
 
 
@@ -20,6 +20,46 @@ class taskSet:
         self.stats = {}
         self.lastBM = False
         self.convPositive = True
+        nameList = self.getNameList()
+        self.db = scoreDB(nameList)
+        self.processNewScores()
+
+    def processNewScores(self):
+        while True:
+            score = self.db()
+            if score == False:
+                break
+            else:
+                self.processScore(score)
+
+    def processScoreXY(self, score):
+        for task in self.BMs:
+            if score['name'] == task['name']:
+                score['x'] = task['x']
+                score['y'] = task['y']
+                return score
+        for row in self.trainers:
+            for task in row:
+                if score['name'] == task['name']:
+                    print(score)
+                    score['x'] = task['x']
+                    score['y'] = task['y']
+                    return score
+
+    def processScore(self, score):
+        score = self.processScoreXY(score)
+        convOut = self.processResults(score, score['x'], score['y'])
+        return convOut
+
+    def getNameList(self):
+        out = []
+        for task in self.BMs:
+            out.append(task['name'])
+        for row in self.trainers:
+            for task in row:
+                print(task)
+                out.append(task['name'])
+        return out
 
     def convX(self, x):
         if self.convPositive:
@@ -50,7 +90,10 @@ class taskSet:
         total = hitPoints - missPoints
         print(hitPoints, missPoints, total)
         pops = (total - score) // 10
-        shots = hits + misses + pops
+
+        shots = hits + misses
+        hits = hits - pops
+
         acc = hits / shots
 
         performance = self.performanceFunction(acc)
@@ -118,7 +161,13 @@ class taskSet:
         print(key, x, y)
         raise Exception('selection failed somehow')
 
+    def processBM(self, taskData, x):
+        print('benchmark processing not implemented :)')
+        return True
+
     def processResults(self, taskData, x, y):
+        if y == -1:
+            return self.processBM(taskData, x)
         score = self.parseScore(taskData)
         convOut = self.convolve(x, y, score)
         return convOut
@@ -142,7 +191,6 @@ class taskSet:
             return self.getTrainingTask()
 
     def runTask(self):
-        db = getScore()
         task = self.getTask()
         ID = task['ID']
         tName = self.config['taskSetName'] + ' ' + \
@@ -156,12 +204,7 @@ class taskSet:
             inv = input()
             if inv != 'YES':
                 continue
-            new, data = db.score()
-            if new == False:
-                continue
-            if self.lastBM:
-                return True
-            return self.processResults(data, task['x'], task['y'])
+            return self.processNewScores()
 
     def shiftConv(self, curX, curY, tarX, tarY, step):
         x = curX - tarX
@@ -218,13 +261,6 @@ class taskSet:
                 if w < self.config['minChance']:
                     w = self.config['minChance']
                 item['baseWeight'] = w
-
-    def printBaseWeights(self):
-        for row in self.trainers:
-            line = []
-            for item in row:
-                line.append(item['baseWeight'])
-            print(line)
 
     def trainOrBM(self):
         if self.runsSinceBM == -1:
