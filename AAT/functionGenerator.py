@@ -124,9 +124,9 @@ class func:
 
 
 def main():
-    exampleDefinition2 = {'inputRanges': [0, 0.8, 0.87, 0.91, 0.95, 0.97],
-                          'outputRanges': [-1, -1, -0.2, 0, 0.2, 1],
-                          'scales': [0, 0, 0, 0, 0]
+    exampleDefinition2 = {'inputRanges': [-1, -0.25, 0, 0.25, 1],
+                          'outputRanges': [0, 0.7, 1, 0.7, 0],
+                          'scales': [1, -0.3, -0.3, 1]
                           }
 
     f = func(exampleDefinition2)

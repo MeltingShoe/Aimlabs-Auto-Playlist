@@ -23,6 +23,7 @@ class taskSet:
         nameList = self.getNameList()
         self.db = scoreDB(nameList)
         self.processNewScores()
+        self.weightFunc = func(self.config['weightFunc'])
 
     def processNewScores(self):
         while True:
@@ -137,13 +138,19 @@ class taskSet:
 
     def selectTraining(self):
         wMatrix = self.setFinalWeights()
-        if self.debug:
-            print('WEIGHT MATRIX:')
-            self.printMatrix(wMatrix)
         total = 0
         for row in wMatrix:
             for item in row:
                 total += item
+        if self.debug:
+            print('WEIGHT MATRIX:')
+            wm = wMatrix
+            for row in wm:
+                line = []
+                for item in row:
+                    percent = item / total
+                    line.append(percent)
+                print(line)
         key = random.uniform(0, total)
         if self.debug:
             print('making selection. total =', total, 'key =', key)
@@ -257,9 +264,9 @@ class taskSet:
     def setBaseWeights(self):
         for row in self.trainers:
             for item in row:
-                w = 1 - abs(item['lockVal'])
-                if w < self.config['minChance']:
-                    w = self.config['minChance']
+                val = abs(item['lockVal'])
+                w = self.weightFunc(val)
+                print('lockVal', val, 'weight', w)
                 item['baseWeight'] = w
 
     def trainOrBM(self):
@@ -274,7 +281,7 @@ class taskSet:
 
 
 def main():
-    t = taskSet('config.yaml')
+    t = taskSet('1w6tpopConfig.yaml')
     while True:
         print('RUNNING TASK')
         t.runTask()
