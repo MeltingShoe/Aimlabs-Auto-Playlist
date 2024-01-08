@@ -25,14 +25,14 @@ def openYAML(path):
 
 
 class rawDB:
-    def __init__(self):
+    def __init__(self, resetPoint=0):
         self.dbPath = os.path.abspath(os.path.join(os.getenv(
             "APPDATA"), os.pardir, "LocalLow\\statespace\\aimlab_tb\\klutch.bytes"))
 
         self.data = []
         self.readDB()
         self.index = self.getLast()[0]
-        self.lastScore = 0
+        self.lastScore = resetPoint
         self.unreadScores = []
         self.allScores = []
 
@@ -86,6 +86,7 @@ class rawDB:
         res = cur.execute("SELECT * FROM TaskData")
         out = res.fetchall()
         self.data = out
+        return out
 
     def getLast(self):
         return self.data[-1]
@@ -128,8 +129,8 @@ class rawDB:
 
 
 class scoreDB:
-    def __init__(self, names):
-        self.db = rawDB()
+    def __init__(self, names, resetPoint=0):
+        self.db = rawDB(resetPoint=resetPoint)
         self.taskNames = names
         self.allScores = []
         self.unreadScores = []
@@ -166,7 +167,7 @@ class scoreDB:
 def launchTask(ID):
     url = 'aimlab://workshop?id='
     url += str(ID)
-    webbrowser.open(url)
+    # webbrowser.open(url)
 
 
 def YN(prompt):

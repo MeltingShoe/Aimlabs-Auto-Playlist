@@ -21,7 +21,9 @@ class taskSet:
         self.lastBM = False
         self.convPositive = True
         nameList = self.getNameList()
-        self.db = scoreDB(nameList)
+        mainConfig = openYAML('config.yaml')
+        resetPoint = mainConfig['resetPoint']
+        self.db = scoreDB(nameList, resetPoint=resetPoint)
         self.processNewScores()
         self.weightFunc = func(self.config['weightFunc'])
 

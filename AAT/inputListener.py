@@ -25,6 +25,9 @@ class inputListener:
     def runTask(self):
         self.handler.runTask()
 
+    def getFeedback(self):
+        return self.handler.getFeedback()
+
 
 def main():
     pass

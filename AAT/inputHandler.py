@@ -24,6 +24,9 @@ class inputHandler:
     def checkForScore(self):
         pass
 
+    def getFeedback(self):
+        pass
+
 
 def main():
     pass
