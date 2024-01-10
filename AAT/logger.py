@@ -1,7 +1,7 @@
 import logging
 import inspect
 import functools
-from utils import openYAML
+from utils import openYAML, isMatrix, processMatrix
 import os
 import datetime
 
@@ -47,17 +47,24 @@ class Logger:
 
         return f"{file_name}:{line_number} - {function_name}"
 
-    def printMsg(self, level, msg=None):
-        if self.prints and level >= self.printLevel:
-
-            log_msg = f"{self.level_name[str(level)]} - {self._get_caller_info()} - {msg}" if msg else f"{self._get_caller_info()}"
-            print(log_msg)
-
     def logMsg(self, level, msg=None):
-        if self.logs and level > self.logLevel:
-            log_msg = f"{self.level_name[str(level)]} - {self._get_caller_info()} - {msg}" if msg else f"{self._get_caller_info()}"
+        if (self.prints == False) and (self.logs == False):
+            return False
+
+        if isMatrix(msg):
+            processed_msg = processMatrix(msg)
+            logMsg = f"{self.level_name[str(level)]} - {self._get_caller_info()} - {processed_msg}"
+        else:
+            logMsg = f"{self.level_name[str(level)]} - {self._get_caller_info()} - {msg}" if msg else f"{self._get_caller_info()}"
+
+        if self.prints and level >= self.printLevel:
+            print(logMsg)
+
+        if self.logs and level >= self.logLevel:
             with open(self.log_file_path, 'a') as logfile:
-                logfile.write(log_msg + '\n')
+                logfile.write(logMsg + '\n')
+
+        return True
 
 
 logger_instance = Logger()
@@ -82,12 +89,10 @@ def log(level_or_func=None):
 
             # Log function entry (entry_exit_level)
             entry_msg_func = f"Entering {inner_func.__name__}"
-            logger_instance.printMsg(entry_exit_level, entry_msg_func)
             logger_instance.logMsg(entry_exit_level, entry_msg_func)
 
             # Log function entry with arguments and keyword arguments (args_return_level)
             entry_msg_args = f"Args: {args}, kwargs: {kwargs}"
-            logger_instance.printMsg(args_return_level, entry_msg_args)
             logger_instance.logMsg(args_return_level, entry_msg_args)
 
             # Call the wrapped function
@@ -95,13 +100,11 @@ def log(level_or_func=None):
 
             # Log and print return value (args_return_level)
             return_msg = f"Return value: {result}"
-            logger_instance.printMsg(args_return_level, return_msg)
             logger_instance.logMsg(args_return_level, return_msg)
 
             # Log function exit (entry_exit_level)
             exit_msg = f"Exiting {inner_func.__name__}"
             logger_instance.logMsg(entry_exit_level, exit_msg)
-            logger_instance.printMsg(entry_exit_level, exit_msg)
 
             return result
 
@@ -141,30 +144,25 @@ def logLevel(level):
 
 
 def debug(msg=None):
-    # Send message to both printMsg and logMsg at level 1
-    logger_instance.printMsg(1, msg)
+    # Send message to logMsg at level 1
     logger_instance.logMsg(1, msg)
 
 
 def info(msg=None):
-    # Send message to both printMsg and logMsg at level 2
-    logger_instance.printMsg(2, msg)
+    # Send message to logMsg at level 2
     logger_instance.logMsg(2, msg)
 
 
 def warning(msg=None):
-    # Send message to both printMsg and logMsg at level 3
-    logger_instance.printMsg(3, msg)
+    # Send message to logMsg at level 3
     logger_instance.logMsg(3, msg)
 
 
 def error(msg=None):
-    # Send message to both printMsg and logMsg at level 4
-    logger_instance.printMsg(4, msg)
+    # Send message to logMsg at level 4
     logger_instance.logMsg(4, msg)
 
 
 def critical(msg=None):
-    # Send message to both printMsg and logMsg at level 5
+    # Send message to logMsg at level 5
     logger_instance.logMsg(5, msg)
-    logger_instance.printMsg(5, msg)

@@ -1,15 +1,23 @@
 from container import container
 from logger import log, logLevel, debug, info, warning, error, critical
 import time
+from utils import devBlock, isMatrix, format_list_as_table, processMatrix
+
+
+@devBlock
+def runtime():
+    rt = container()
+    while True:
+        rt.run()
 
 
 @log
 def main():
-    warning('shit aint bussin')
+    a = [[1, 2, 3], [3, 4, 4], [5, 6, 4], [7, 8, 4]]
+    b = [1, 2, 3, 4, 5]
+    info(a)
     try:
-        rt = container()
-        while True:
-            rt.run()
+        runtime()
     except KeyboardInterrupt:
         # Log the keyboard interrupt as critical
         critical("Keyboard interrupt received.")
@@ -20,4 +28,4 @@ def main():
 
 if __name__ == '__main__':
     main()
-    time.sleep(2)
+    time.sleep(1)

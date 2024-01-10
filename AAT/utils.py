@@ -5,6 +5,62 @@ import webbrowser
 import ast
 
 
+def format_list_as_table(row):
+    formatted_string = "| " + " | ".join(map(str, row)) + " |\n"
+    return formatted_string
+
+
+def padNum(num):
+    if not isinstance(num, (float, int)):
+        raise ValueError("Input must be a float or an int")
+
+    formatted_num = "{:07.4f}".format(float(num))
+    return formatted_num
+
+
+def format_nested_list(nested_list):
+    formatted_list = []
+
+    for sublist in nested_list:
+        formatted_sublist = []
+
+        for element in sublist:
+            formatted_sublist.append(padNum(element))
+
+        formatted_list.append(formatted_sublist)
+
+    return formatted_list
+
+
+def isMatrix(input_list):
+    if not isinstance(input_list, list):
+        return False
+
+    if not all(isinstance(sublist, list) for sublist in input_list):
+        return False
+
+    if not input_list:
+        # Empty list is considered valid
+        return True
+
+    length_of_first_sublist = len(input_list[0])
+
+    return all(len(sublist) == length_of_first_sublist for sublist in input_list[1:])
+
+
+def processMatrix(input_matrix):
+    if not isMatrix(input_matrix):
+        raise ValueError("Input is not a valid matrix")
+
+    formatted_nested_list = format_nested_list(input_matrix)
+
+    # Applying format_list_as_table to every sublist and concatenating the results
+    formatted_table = ''.join(format_list_as_table(sublist)
+                              for sublist in formatted_nested_list)
+
+    return formatted_table
+
+
 def configPath(path):
     exists = os.path.isfile(os.path.abspath(os.path.join(
         os.getcwd(), os.pardir, 'config', path)))

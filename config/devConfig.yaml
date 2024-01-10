@@ -1,5 +1,5 @@
 prints: true
-printLevel: 2
+printLevel: 1
 logs: true
 logLevel: 1
 blockTaskLaunch: true
