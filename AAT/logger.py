@@ -13,8 +13,6 @@ class Logger:
         self.printLevel = config['printLevel']
         self.logs = config['logs']
         self.logLevel = config['logLevel']
-        self.blockTaskLaunch = config['blockTaskLaunch']
-        self.confirmToRunBlockedFunctions = config['confirmToRunBlockedFunctions']
         # Get the current time to include in the log file name
         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 
@@ -60,7 +58,6 @@ class Logger:
             log_msg = f"{self.level_name[str(level)]} - {self._get_caller_info()} - {msg}" if msg else f"{self._get_caller_info()}"
             with open(self.log_file_path, 'a') as logfile:
                 logfile.write(log_msg + '\n')
-                logfile.flush()  # Flush the buffer to ensure the message is written immediately
 
 
 logger_instance = Logger()

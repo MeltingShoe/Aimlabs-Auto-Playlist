@@ -5,6 +5,7 @@ import time
 
 @log
 def main():
+    warning('shit aint bussin')
     try:
         rt = container()
         while True:
@@ -19,4 +20,4 @@ def main():
 
 if __name__ == '__main__':
     main()
-    time.sleep(3)
+    time.sleep(2)
