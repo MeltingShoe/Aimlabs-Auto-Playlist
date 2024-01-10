@@ -1,0 +1,5 @@
+ERROR - main.py:12 - <module> - Entering main
+ERROR - main.py:12 - <module> - Args: (), kwargs: {}
+WARNING - main.py:7 - main - test warning
+ERROR - main.py:12 - <module> - Return value: None
+ERROR - main.py:12 - <module> - Exiting main

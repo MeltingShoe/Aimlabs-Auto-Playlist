@@ -1,0 +1,10 @@
+INFO - main.py:30 - <module> - Entering main
+DEBUG - main.py:30 - <module> - Args: (), kwargs: {}
+INFO - main.py:14 - main - Entering test
+DEBUG - main.py:14 - main - Args: (), kwargs: {}
+DEBUG - main.py:14 - main - Return value: None
+INFO - main.py:14 - main - Exiting test
+WARNING - main.py:16 - main - test warning
+CRITICAL - main.py:23 - main - Keyboard interrupt received.
+DEBUG - main.py:30 - <module> - Return value: None
+INFO - main.py:30 - <module> - Exiting main

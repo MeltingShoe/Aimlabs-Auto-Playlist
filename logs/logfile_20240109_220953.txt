@@ -1,0 +1,3 @@
+INFO - main.py:26 - <module> - Entering main
+CRITICAL - main.py:19 - main - Keyboard interrupt received.
+INFO - main.py:26 - <module> - Exiting main

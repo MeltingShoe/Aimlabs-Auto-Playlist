@@ -1,5 +1,6 @@
 prints: true
-basicLogs: true
-verboseLogs: true
+printLevel: 1
+logs: true
+logLevel: 1
 blockTaskLaunch: true
 confirmToRunBlockedFunctions: true

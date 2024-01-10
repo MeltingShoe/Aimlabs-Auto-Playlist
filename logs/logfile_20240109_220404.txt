@@ -1,0 +1,2 @@
+WARNING - main.py:16 - main - test warning
+CRITICAL - main.py:22 - main - Keyboard interrupt received.
