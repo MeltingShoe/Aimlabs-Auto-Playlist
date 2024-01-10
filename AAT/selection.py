@@ -1,6 +1,7 @@
 from functionGenerator import func
 from utils import saveYAML, openYAML, launchTask, scoreDB, rawDB
 import random
+import numpy
 
 
 class taskSet:

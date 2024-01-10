@@ -1,3 +1,5 @@
 prints: true
 basicLogs: true
 verboseLogs: true
+blockTaskLaunch: true
+confirmToRunBlockedFunctions: true

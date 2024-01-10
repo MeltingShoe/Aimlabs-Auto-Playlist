@@ -34,6 +34,25 @@ def openYAML(path):
             print(exc)
 
 
+config = openYAML('devConfig.yaml')
+block = config['blockTaskLaunch']
+confirm = config['confirmToRunBlockedFunctions']
+
+
+def devBlock(func):
+    if not block:
+        return func
+    if not confirm:
+        def nop(*args, **kwargs):
+            pass
+        return nop
+
+    def wrap(*args, **kwargs):
+        if YN('Function blocked, run function?'):
+            func(*args, **kwargs)
+    return wrap
+
+
 class rawDB:
     def __init__(self, resetPoint=0):
         self.dbPath = os.path.abspath(os.path.join(os.getenv(
@@ -174,13 +193,11 @@ class scoreDB:
             return False
 
 
+@devBlock
 def launchTask(ID):
     url = 'aimlab://workshop?id='
     url += str(ID)
-    if False:
-        webbrowser.open(url)
-    else:
-        print('task launch disabled')
+    webbrowser.open(url)
 
 
 def YN(prompt):
@@ -200,21 +217,7 @@ def YN(prompt):
 
 
 def main():
-    sb = rawDB()
-    while True:
-        data = sb.getNextScore()
-        print(data)
-        if data == False:
-            break
-    print('broke')
-    names = ['CsLevel.meltingshoe.1W6TPOP .S6BRCL']
-    betterDB = scoreDB(names)
-    while True:
-        data = betterDB.getNextScore()
-        print(data)
-        if data == False:
-            break
-    print('broke again')
+    print('theres nothing here...')
 
 
 if __name__ == '__main__':
