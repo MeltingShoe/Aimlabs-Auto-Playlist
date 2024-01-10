@@ -5,9 +5,20 @@ import webbrowser
 import ast
 
 
+def configPath(path):
+    exists = os.path.isfile(os.path.abspath(os.path.join(
+        os.getcwd(), os.pardir, 'config', path)))
+    if exists:
+        path = os.path.abspath(os.path.join(
+            os.getcwd(), os.pardir, 'config', path))
+    else:
+        path = os.path.abspath(os.path.join(
+            os.getcwd(), os.pardir, 'config/modelConfig', path))
+    return path
+
+
 def saveYAML(config, path):
-    path = os.path.abspath(os.path.join(
-        os.getcwd(), os.pardir, 'config', path))
+    path = configPath(path)
     file = open(path, "w")
     yaml.dump(config, file)
     file.close()
@@ -15,8 +26,7 @@ def saveYAML(config, path):
 
 
 def openYAML(path):
-    path = os.path.abspath(os.path.join(
-        os.getcwd(), os.pardir, 'config', path))
+    path = configPath(path)
     with open(path, "r") as stream:
         try:
             return yaml.safe_load(stream)
@@ -167,7 +177,10 @@ class scoreDB:
 def launchTask(ID):
     url = 'aimlab://workshop?id='
     url += str(ID)
-    # webbrowser.open(url)
+    if False:
+        webbrowser.open(url)
+    else:
+        print('task launch disabled')
 
 
 def YN(prompt):

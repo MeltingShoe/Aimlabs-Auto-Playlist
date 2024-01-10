@@ -1,4 +1,4 @@
-from utils import YN, saveYAML, openYAML, launchTask, getScore
+from utils import YN, saveYAML, openYAML, launchTask, rawDB
 
 
 class setIDs:
@@ -34,7 +34,7 @@ class setIDs:
 
 def runIDs(newTask=True):
 
-    db = getScore()
+    db = rawDB()
     IDs = openYAML('wsIDs.yaml')
 
     taskConfig = []

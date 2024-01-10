@@ -7,10 +7,12 @@ class taskSet:
     def __init__(self, configPath):
 
         self.debug = True
+        self.runs = 0
         self.config = openYAML(configPath)
+        self.wmFunc = func(self.config['weightChanceMultiplier'])
         self.BMs = self.config['benchmarks']
         self.trainers = self.config['trainers']
-        self.runsSinceBM = 0
+        self.runsSinceBM = -3
         self.maxIntervalBM = self.config['maxIntervalBM']
         self.decayBM = func(self.config['decayBM'])
         self.convXfnc = func(self.config['convX'])
@@ -24,8 +26,10 @@ class taskSet:
         mainConfig = openYAML('config.yaml')
         resetPoint = mainConfig['resetPoint']
         self.db = scoreDB(nameList, resetPoint=resetPoint)
-        self.processNewScores()
+        self.stepFunc = func(self.config['stepFunc'])
         self.weightFunc = func(self.config['weightFunc'])
+        self.lastMap = {}
+        self.processNewScores()
 
     def processNewScores(self):
         while True:
@@ -50,8 +54,12 @@ class taskSet:
                     return score
 
     def processScore(self, score):
+
         score = self.processScoreXY(score)
         convOut = self.processResults(score, score['x'], score['y'])
+        self.lastMap['x'] = score['x']
+        self.lastMap['y'] = score['y']
+        self.runs += 1
         return convOut
 
     def getNameList(self):
@@ -136,6 +144,9 @@ class taskSet:
         self.setBaseWeights()
         wL = self.getMatrix('baseWeight')
         self.setMatrix('finalWeight', wL)
+        x = self.lastMap['x']
+        y = self.lastMap['y']
+        self.trainers[y][x]['finalWeight'] = 0
         return wL
 
     def selectTraining(self):
@@ -220,13 +231,17 @@ class taskSet:
         y = curY - tarY
         return self.convFilter(x, y, step)
 
+    def setStepLen(self):
+        return self.stepFunc(self.runs)
+
     def convolve(self, x, y, performance):
+        stepLen = self.setStepLen()
         if self.debug:
             print('ABOUT TO CONVOLVE, INPUT VALUES:')
             self.printMatrix(self.getMatrix('lockVal'))
         base = self.trainers[y][x]['lockVal']
         step = performance - base
-        step = step * self.config['stepLen']
+        step = step * stepLen
         out = []
         if performance > 0:
             sign = 1
@@ -241,6 +256,9 @@ class taskSet:
                 adjustment = self.shiftConv(itemIndex, rowIndex, x, y, step)
                 # print(itemIndex, rowIndex, adjustment)
                 adjustment = abs(adjustment) * sign
+                weightChanceMultiplier = self.wmFunc(
+                    self.trainers[rowIndex][itemIndex]['lockVal'])
+                adjustment = adjustment * weightChanceMultiplier
                 self.trainers[rowIndex][itemIndex]['lockVal'] += adjustment
                 if self.trainers[rowIndex][itemIndex]['lockVal'] < -1:
                     self.trainers[rowIndex][itemIndex]['lockVal'] = -1
@@ -273,7 +291,7 @@ class taskSet:
 
     def trainOrBM(self):
         if self.runsSinceBM == -1:
-            self.runsSinceBM = 0
+            self.runsSinceBM += 1
             return True
         x = self.runsSinceBM / self.maxIntervalBM
         w = self.decayBM.getOutput(x)
