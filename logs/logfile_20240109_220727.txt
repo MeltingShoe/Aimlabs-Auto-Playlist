@@ -1,6 +1,0 @@
-INFO - main.py:30 - <module> - Entering main
-INFO - main.py:14 - main - Entering test
-INFO - main.py:14 - main - Exiting test
-WARNING - main.py:16 - main - test warning
-CRITICAL - main.py:23 - main - Keyboard interrupt received.
-INFO - main.py:30 - <module> - Exiting main
