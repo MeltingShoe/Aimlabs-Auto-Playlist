@@ -236,6 +236,18 @@ def YN(prompt):
     return out
 
 
+def weightedSelect(inputList):
+    total = 0
+    for item in inputList:
+        total += item[0]
+    key = random.uniform(0, total)
+    for item in inputList:
+        if key < item[0]:
+            return item[1]
+        key -= item[0]
+    raise Exception('selection failed somehow')
+
+
 def main():
     print('theres nothing here...')
 
