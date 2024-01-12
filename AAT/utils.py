@@ -3,8 +3,10 @@ import os
 import sqlite3
 import webbrowser
 import ast
+from logger import log, logLevel, debug, info, warning, error, critical
 
 
+@log
 def configPath(path):
     exists = os.path.isfile(os.path.abspath(os.path.join(
         os.getcwd(), os.pardir, 'config', path)))
@@ -17,6 +19,7 @@ def configPath(path):
     return path
 
 
+@log
 def saveYAML(config, path):
     path = configPath(path)
     file = open(path, "w")
@@ -25,6 +28,7 @@ def saveYAML(config, path):
     print("YAML file saved.")
 
 
+@log
 def openYAML(path):
     path = configPath(path)
     with open(path, "r") as stream:
@@ -39,6 +43,7 @@ block = config['blockTaskLaunch']
 confirm = config['confirmToRunBlockedFunctions']
 
 
+@log
 def devBlock(func):
     if not block:
         return func
@@ -65,6 +70,7 @@ class rawDB:
         self.unreadScores = []
         self.allScores = []
 
+    @log
     def getInitScores(self):
         self.readDB()
         names = []
@@ -84,10 +90,12 @@ class rawDB:
                 names.append(out)
         return names
 
+    @log
     def addScore(self, score):
         self.allScores.append(score)
         self.unreadScores.append(score)
 
+    @log
     def score(self):
         self.readDB()
         newIndex = self.getLast()[0]
@@ -108,6 +116,7 @@ class rawDB:
 
         return isNew, out
 
+    @log
     def readDB(self):
         con = sqlite3.connect(self.dbPath)
         cur = con.cursor()
@@ -117,9 +126,11 @@ class rawDB:
         self.data = out
         return out
 
+    @log
     def getLast(self):
         return self.data[-1]
 
+    @log
     def checkValid(self, score):
         name = score[3]
         if 'meltingshoe' in name:
@@ -127,6 +138,7 @@ class rawDB:
         else:
             return False
 
+    @log
     def getUnprocessedScores(self):
         self.readDB()  # eventually change this to just select items over a certain ID, prolly not hard with SQL. Could be part of the readDB()
         while self.lastScore < len(self.data):
@@ -136,6 +148,7 @@ class rawDB:
                 self.addScore(score)
             self.lastScore += 1
 
+    @log
     def getNextScore(self):
         self.getUnprocessedScores()
         if len(self.unreadScores) > 0:
@@ -143,6 +156,7 @@ class rawDB:
         else:
             return False
 
+    @log
     def format(self, score):
         x = score
         y = x[12]
@@ -166,13 +180,16 @@ class scoreDB:
         self.unprocessedScores = []
         self.processScores()
 
+    @log
     def __call__(self):
         return self.getNextScore()
 
+    @log
     def addScore(self, score):
         self.allScores.append(score)
         self.unreadScores.append(score)
 
+    @log
     def processScores(self):
 
         while True:
@@ -185,6 +202,7 @@ class scoreDB:
                     self.addScore(score)
                     break
 
+    @log
     def getNextScore(self):
         self.processScores()
         if len(self.unreadScores) > 0:
@@ -201,6 +219,7 @@ def launchTask(ID):
     webbrowser.open(url)
 
 
+@log
 def YN(prompt):
     if type(prompt) != str:
         print('bad prompt type')
