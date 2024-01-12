@@ -107,9 +107,9 @@ performanceFunction:
   inputRanges:
   - 0
   - 0.8
-  - 0.87
-  - 0.91
-  - 0.95
+  - 0.89
+  - 0.93
+  - 0.96
   - 0.97
   outputRanges:
   - -1

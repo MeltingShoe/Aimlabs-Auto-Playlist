@@ -244,7 +244,9 @@ class scoreDB:
     def getNextScore(self):
         self.processScores()
         if len(self.unreadScores) > 0:
-            return self.unreadScores.pop(0)
+            a = self.unreadScores.pop(0)
+            print('a', a)
+            return a
         else:
             return False
 

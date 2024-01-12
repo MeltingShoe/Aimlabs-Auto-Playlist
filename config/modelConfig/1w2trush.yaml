@@ -1,0 +1,343 @@
+benchmarks:
+- ID: 3135124191
+  difficulty: BM
+  name: CsLevel.hartrean.AAT 1W2T.S6YNHL
+  scores: []
+  size: 0.65R
+  x: 0
+  y: -1
+- ID: 3135123594
+  difficulty: BM
+  name: CsLevel.hartrean.AAT 1W2T.S6YNGY
+  scores: []
+  size: 0.45R
+  x: 1
+  y: -1
+- ID: 3135123412
+  difficulty: BM
+  name: CsLevel.hartrean.AAT 1W2T.S6YNEL
+  scores: []
+  size: 0.3R
+  x: 2
+  y: -1
+- ID: 3135123274
+  difficulty: BM
+  name: CsLevel.hartrean.AAT 1W2T.S6YNDF
+  scores: []
+  size: 0.2R
+  x: 3
+  y: -1
+- ID: 3135118570
+  difficulty: BM
+  name: CsLevel.hartrean.AAT 1W2T.S6YLZC
+  scores: []
+  size: 0.14R
+  x: 4
+  y: -1
+decayBM:
+  inputRanges:
+  - 0
+  - 1
+  outputRanges:
+  - 0.05
+  - 0.95
+  scales:
+  - 1.5
+stepFunc:
+  inputRanges:
+  - 0
+  - 20
+  - 100
+  outputRanges:
+  - 0.7
+  - 0.65
+  - 0.5
+  scales:
+  - 0
+  - 0
+convX:
+  inputRanges:
+  - -4
+  - -2
+  - -1
+  - 0
+  - 1
+  - 2
+  - 4
+  outputRanges:
+  - 0
+  - 0.4
+  - 0.8
+  - 1
+  - 0.8
+  - 0.4
+  - 0
+  scales:
+  - 1.2
+  - 0
+  - -0.3
+  - -0.3
+  - 0
+  - 1.2
+convY:
+  inputRanges:
+  - -4
+  - -2
+  - -1
+  - 0
+  - 1
+  - 2
+  - 4
+  outputRanges:
+  - 0
+  - 0.4
+  - 0.8
+  - 1
+  - 0.8
+  - 0.4
+  - 0
+  scales:
+  - 1.2
+  - 0
+  - -0.3
+  - -0.3
+  - 0
+  - 1.2
+performanceFunction:
+  inputRanges:
+  - 0
+  - 0.8
+  - 0.89
+  - 0.93
+  - 0.96
+  - 0.97
+  outputRanges:
+  - -1
+  - -1
+  - -0.2
+  - 0
+  - 0.2
+  - 1
+  scales:
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+weightFunc:
+  inputRanges:
+  - -1
+  - -0.25
+  - 0
+  - 0.25
+  - 1
+  outputRanges:
+  - 0
+  - 0.85
+  - 1
+  - 0.85
+  - 0
+  scales:
+  - 1
+  - 0
+  - 0
+  - 1
+weightChanceMultiplier:
+  inputRanges:
+  - -1
+  - -0.25
+  - 0
+  - 0.25
+  - 1
+  outputRanges:
+  - 0.85
+  - 0.95
+  - 1.1
+  - 0.95
+  - 0.85
+  scales:
+  - 1
+  - -0.3
+  - -0.3
+  - 1
+maxIntervalBM: 12
+minChance: 0.03
+stepLen: 0.67
+scoreFunc: '1W6TPOP'
+taskSetName: '1W6TPOP'
+trainers:
+- - ID: 3135123147
+    difficulty: 3S
+    lockVal: 0.5
+    name: CsLevel.hartrean.AAT 1W2T.S6YN8Q
+    size: 0.65R
+    x: 0
+    y: 0
+  - ID: 3135122923
+    difficulty: 3S
+    lockVal: 0
+    name: CsLevel.hartrean.AAT 1W2T.S6YN7O
+    size: 0.45R
+    x: 1
+    y: 0
+  - ID: 3135122783
+    difficulty: 3S
+    lockVal: 0
+    name: CsLevel.hartrean.AAT 1W2T.S6YN6O
+    size: 0.3R
+    x: 2
+    y: 0
+  - ID: 3135122583
+    difficulty: 3S
+    lockVal: -0.25
+    name: CsLevel.hartrean.AAT 1W2T.S6YN5S
+    size: 0.2R
+    x: 3
+    y: 0
+  - ID: 3135124418
+    difficulty: 3S
+    lockVal: -0.5
+    name: CsLevel.hartrean.AAT 1W2T.S6YLL8
+    size: 0.14R
+    x: 4
+    y: 0
+- - ID: 3135122423
+    difficulty: 2.575S
+    lockVal: -0.25
+    name: CsLevel.hartrean.AAT 1W2T.S6YMZT
+    size: 0.65R
+    x: 0
+    y: 1
+  - ID: 3135122077
+    difficulty: 2.575S
+    lockVal: -0.25
+    name: CsLevel.hartrean.AAT 1W2T.S6YMXW
+    size: 0.45R
+    x: 1
+    y: 1
+  - ID: 3135121811
+    difficulty: 2.575S
+    lockVal: -0.5
+    name: CsLevel.hartrean.AAT 1W2T.S6YMWY
+    size: 0.3R
+    x: 2
+    y: 1
+  - ID: 3135121589
+    difficulty: 2.575S
+    lockVal: -0.75
+    name: CsLevel.hartrean.AAT 1W2T.S6YMW3
+    size: 0.2R
+    x: 3
+    y: 1
+  - ID: 3135117655
+    difficulty: 2.575S
+    lockVal: -1
+    name: CsLevel.hartrean.AAT 1W2T.S6YLP8
+    size: 0.14R
+    x: 4
+    y: 1
+- - ID: 3135121360
+    difficulty: 2.15S
+    lockVal: -0.5
+    name: CsLevel.hartrean.AAT 1W2T.S6YMQY
+    size: 0.65R
+    x: 0
+    y: 2
+  - ID: 3135121047
+    difficulty: 2.15S
+    lockVal: -0.75
+    name: CsLevel.hartrean.AAT 1W2T.S6YMP1
+    size: 0.45R
+    x: 1
+    y: 2
+  - ID: 3135120866
+    difficulty: 2.15S
+    lockVal: -1
+    name: CsLevel.hartrean.AAT 1W2T.S6YMO1
+    size: 0.3R
+    x: 2
+    y: 2
+  - ID: 3135120739
+    difficulty: 2.15S
+    lockVal: -1
+    name: CsLevel.hartrean.AAT 1W2T.S6YMN5
+    size: 0.2R
+    x: 3
+    y: 2
+  - ID: 3135118261
+    difficulty: 2.15S
+    lockVal: -1
+    name: CsLevel.hartrean.AAT 1W2T.S6YLST
+    size: 0.14R
+    x: 4
+    y: 2
+- - ID: 3135120519
+    difficulty: 1.725S
+    lockVal: -1
+    name: CsLevel.hartrean.AAT 1W2T.S6YMIB
+    size: 0.65R
+    x: 0
+    y: 3
+  - ID: 3135120235
+    difficulty: 1.725S
+    lockVal: -1
+    name: CsLevel.hartrean.AAT 1W2T.S6YMHC
+    size: 0.45R
+    x: 1
+    y: 3
+  - ID: 3135119782
+    difficulty: 1.725S
+    lockVal: -1
+    name: CsLevel.hartrean.AAT 1W2T.S6YMG3
+    size: 0.3R
+    x: 2
+    y: 3
+  - ID: 3135119652
+    difficulty: 1.725S
+    lockVal: -1
+    name: CsLevel.hartrean.AAT 1W2T.S6YMEN
+    size: 0.2R
+    x: 3
+    y: 3
+  - ID: 3135118423
+    difficulty: 1.725S
+    lockVal: -1
+    name: CsLevel.hartrean.AAT 1W2T.S6YLXD
+    size: 0.14R
+    x: 4
+    y: 3
+- - ID: 3135119499
+    difficulty: 1.3S
+    lockVal: -1
+    name: CsLevel.hartrean.AAT 1W2T.S6YMAN
+    size: 0.65R
+    x: 0
+    y: 4
+  - ID: 3135119323
+    difficulty: 1.3S
+    lockVal: -1
+    name: CsLevel.hartrean.AAT 1W2T.S6YM9R
+    size: 0.45R
+    x: 1
+    y: 4
+  - ID: 3135119177
+    difficulty: 1.3S
+    lockVal: -1
+    name: CsLevel.hartrean.AAT 1W2T.S6YM91
+    size: 0.3R
+    x: 2
+    y: 4
+  - ID: 3135118742
+    difficulty: 1.3S
+    lockVal: -1
+    name: CsLevel.hartrean.AAT 1W2T.S6YM7T
+    size: 0.2R
+    x: 3
+    y: 4
+  - ID: 3135113746
+    difficulty: 1.3S
+    lockVal: -1
+    name: CsLevel.hartrean.AAT 1W2T.S6YM4Z
+    size: 0.14R
+    x: 4
+    y: 4

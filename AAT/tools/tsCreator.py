@@ -105,6 +105,7 @@ def parseTask():
                 val['x'] = x
                 val['y'] = y
                 val['scores'] = []
+                val['ID'] = int(val['ID'])
                 bms.append(val)
                 x += 1
     y += 1
@@ -120,6 +121,8 @@ def parseTask():
 
                     val['x'] = x
                     val['y'] = y
+                    val['ID'] = int(val['ID'])
+                    val['lockVal'] = -1
 
                     print(val)
 

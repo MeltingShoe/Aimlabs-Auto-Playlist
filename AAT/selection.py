@@ -1,12 +1,12 @@
 from functionGenerator import func
 from utils import saveYAML, openYAML, launchTask, scoreDB, rawDB
+from logger import log, logLevel, debug, info, warning, error, critical
 import random
 import numpy
 
 
 class taskSet:
     def __init__(self, configPath):
-
         self.debug = True
         self.runs = 0
         self.config = openYAML(configPath)
@@ -25,21 +25,22 @@ class taskSet:
         self.convPositive = True
         nameList = self.getNameList()
         mainConfig = openYAML('config.yaml')
-        resetPoint = mainConfig['resetPoint']
-        self.db = scoreDB(nameList, resetPoint=resetPoint)
+        self.db = scoreDB(nameList, resetPoint=mainConfig['resetPoint'])
         self.stepFunc = func(self.config['stepFunc'])
         self.weightFunc = func(self.config['weightFunc'])
-        self.lastMap = {}
         self.processNewScores()
 
+    @log
     def processNewScores(self):
         while True:
             score = self.db()
+            print(score)
             if score == False:
                 break
             else:
                 self.processScore(score)
 
+    @log
     def processScoreXY(self, score):
         for task in self.BMs:
             if score['name'] == task['name']:
@@ -49,30 +50,29 @@ class taskSet:
         for row in self.trainers:
             for task in row:
                 if score['name'] == task['name']:
-                    print(score)
+                    # print(score)
                     score['x'] = task['x']
                     score['y'] = task['y']
                     return score
 
+    @log
     def processScore(self, score):
-
         score = self.processScoreXY(score)
         convOut = self.processResults(score, score['x'], score['y'])
-        self.lastMap['x'] = score['x']
-        self.lastMap['y'] = score['y']
         self.runs += 1
         return convOut
 
+    @log
     def getNameList(self):
         out = []
         for task in self.BMs:
             out.append(task['name'])
         for row in self.trainers:
             for task in row:
-                print(task)
                 out.append(task['name'])
         return out
 
+    @log
     def convX(self, x):
         if self.convPositive:
             return self.convXfnc(x)
@@ -80,6 +80,7 @@ class taskSet:
             x = x * -1
             return self.convXfnc(x)
 
+    @log
     def convY(self, x):
         if self.convPositive:
             return self.convYfnc(x)
@@ -87,35 +88,29 @@ class taskSet:
             x = x * -1
             return self.convYfnc(x)
 
+    @log
     def parseScore(self, taskData):
         if self.scoreFunc == '1W6TPOP':
             return self.score1w6tPOP(taskData)
         raise Exception('invalid score function')
 
+    @log
     def score1w6tPOP(self, taskData):
         score = taskData['score']
         hits = taskData['hits']
         misses = taskData['misses']
-        print('PARSING', score, hits, misses)
         hitPoints = hits * 10
         missPoints = misses * 5
         total = hitPoints - missPoints
-        print(hitPoints, missPoints, total)
         pops = (total - score) // 10
-
         shots = hits + misses
         hits = hits - pops
-
         acc = hits / shots
-
         performance = self.performanceFunction(acc)
-        print(pops, misses, shots, acc, performance)
         self.stats['acc'] = acc
-        if self.debug:
-            print('score', score, 'accuracy', acc, 'hits',
-                  hits, 'misses', misses, 'pops', pops, 'performance', performance, 'shots', shots)
         return performance
 
+    @log
     def getMatrix(self, key):
         out = []
         for row in self.trainers:
@@ -125,31 +120,36 @@ class taskSet:
             out.append(line)
         return out
 
+    @log
     def setMatrix(self, key, matrix):
         x = 0
         y = 0
         for row in self.trainers:
             x = 0
             for item in row:
-                item[key] = matrix[y][x]
+                self.trainers[y][x][key] = matrix[y][x]
+                self.trainers[y][x]['x'] = x
+                self.trainers[y][x]['y'] = y
                 x += 1
             y += 1
+        return self.trainers
 
+    @log
     def convFilter(self, x, y, step):
         xW = self.convX(x)
         yW = self.convY(y)
         w = xW * yW
         return step * w
 
+    @log
     def setFinalWeights(self):
         self.setBaseWeights()
         wL = self.getMatrix('baseWeight')
         self.setMatrix('finalWeight', wL)
-        x = self.lastMap['x']
-        y = self.lastMap['y']
-        self.trainers[y][x]['finalWeight'] = 0
+
         return wL
 
+    @log
     def selectTraining(self):
         wMatrix = self.setFinalWeights()
         total = 0
@@ -157,17 +157,13 @@ class taskSet:
             for item in row:
                 total += item
         if self.debug:
-            print('WEIGHT MATRIX:')
             wm = wMatrix
             for row in wm:
                 line = []
                 for item in row:
                     percent = item / total
                     line.append(percent)
-                print(line)
         key = random.uniform(0, total)
-        if self.debug:
-            print('making selection. total =', total, 'key =', key)
         x = 0
         y = 0
 
@@ -179,13 +175,13 @@ class taskSet:
                 key -= item
                 x += 1
             y += 1
-        print(key, x, y)
         raise Exception('selection failed somehow')
 
+    @log
     def processBM(self, taskData, x):
-        print('benchmark processing not implemented :)')
-        return True
+        self.BMs[x]['score'] = taskData['score']
 
+    @log
     def processResults(self, taskData, x, y):
         if y == -1:
             return self.processBM(taskData, x)
@@ -193,14 +189,17 @@ class taskSet:
         convOut = self.convolve(x, y, score)
         return convOut
 
+    @log
     def getTrainingTask(self):
         x, y = self.selectTraining()
         return self.trainers[y][x]
 
+    @log
     def getBMTask(self):
         index = random.randint(0, (len(self.BMs)-1))
         return self.BMs[index]
 
+    @log
     def getTask(self):
         runBM = self.trainOrBM()
         self.lastBM = runBM
@@ -211,6 +210,7 @@ class taskSet:
             self.runsSinceBM += 1
             return self.getTrainingTask()
 
+    @log
     def runTask(self):
         task = self.getTask()
         ID = task['ID']
@@ -219,26 +219,29 @@ class taskSet:
 
         running = True
         while running:
-            print('Launching '+tName)
+            #print('Launching '+tName)
             launchTask(ID)
-            print('type YES when done')
+            #print('type YES when done')
             inv = input()
             if inv != 'YES':
                 continue
             return self.processNewScores()
 
+    @log
     def shiftConv(self, curX, curY, tarX, tarY, step):
         x = curX - tarX
         y = curY - tarY
         return self.convFilter(x, y, step)
 
+    @log
     def setStepLen(self):
         return self.stepFunc(self.runs)
 
+    @log
     def convolve(self, x, y, performance):
         stepLen = self.setStepLen()
         if self.debug:
-            print('ABOUT TO CONVOLVE, INPUT VALUES:')
+            #print('ABOUT TO CONVOLVE, INPUT VALUES:')
             self.printMatrix(self.getMatrix('lockVal'))
         base = self.trainers[y][x]['lockVal']
         step = performance - base
@@ -271,32 +274,36 @@ class taskSet:
 
         if self.debug:
 
-            print('WE HAVE CONVOLVED, OUTPUT VALUES:')
+            #print('WE HAVE CONVOLVED, OUTPUT VALUES:')
             self.printMatrix(self.getMatrix('lockVal'))
 
-            print('ADJUSTMENT VALUES:')
+            #print('ADJUSTMENT VALUES:')
             self.printMatrix(out)
         return out
 
+    @log
     def printMatrix(self, matrix):
         for row in matrix:
-            print(row)
+            pass
+            # print(row)
 
+    @log
     def setBaseWeights(self):
         for row in self.trainers:
             for item in row:
                 val = abs(item['lockVal'])
                 w = self.weightFunc(val)
-                print('lockVal', val, 'weight', w)
+                #print('lockVal', val, 'weight', w)
                 item['baseWeight'] = w
 
+    @log
     def trainOrBM(self):
         if self.runsSinceBM == -1:
             self.runsSinceBM += 1
             return True
         x = self.runsSinceBM / self.maxIntervalBM
         w = self.decayBM.getOutput(x)
-        print('runs since', self.runsSinceBM, 'bm chance: ', w)
+        #print('runs since', self.runsSinceBM, 'bm chance: ', w)
         point = random.randint(0, 1000000)/1000000
         return point < w
 
