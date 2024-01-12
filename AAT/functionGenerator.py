@@ -1,5 +1,6 @@
 import math
 import matplotlib.pyplot as plt
+from logger import log, logLevel, debug, info, warning, error, critical
 
 
 class func:
@@ -13,11 +14,12 @@ class func:
                 item = item / divisor
         self.scales = definition['scales']
 
+    @log
     def __call__(self, x):
         return self.getOutput(x)
 
+    @log
     def plotFunction(self, samples=1000, oversamples=100):
-
         start = self.inputRanges[0]
         stop = self.inputRanges[-1]
         step = (stop - start)/samples
@@ -34,6 +36,7 @@ class func:
         plt.plot(xs, ys)
         plt.show()
 
+    @log
     def getOutput(self, x):
         if x < self.inputRanges[0]:
             x = self.inputRanges[0]
@@ -54,11 +57,13 @@ class func:
         outY = self.scaleY(normY, rangeData)
         return outY
 
+    @log
     def getXPercent(self, x, rangeData):
         low = rangeData['xLow']
         high = rangeData['xHigh']
         return((x-low)/(high-low))
 
+    @log
     def scaleY(self, normY, rangeData):
         low = rangeData['yLow']
         high = rangeData['yHigh']
@@ -67,6 +72,7 @@ class func:
         shifted = scaled + min([high, low])
         return shifted
 
+    @log
     def getRange(self, x):
         i = 0
         while i < len(self.inputRanges):
@@ -75,6 +81,7 @@ class func:
             i += 1
         return i
 
+    @log
     def getRangeData(self, lowIndex):
         if lowIndex == -1 or lowIndex > len(self.inputRanges):
             return -1
@@ -91,6 +98,7 @@ class func:
             out['yHigh'] = self.outputRanges[lowIndex+1]
         return out
 
+    @log
     def exp(self, x, scale=1, up=True):
         if not up:
             x = 1-x
@@ -100,6 +108,7 @@ class func:
                                     return 1-y'''
         return y
 
+    @log
     def sqrt(self, x, scale=1, up=True):
         if not up:
             x = 1-x
@@ -111,6 +120,7 @@ class func:
                                     return 1-y'''
         return y
 
+    @log
     def curve(self, x, scale=0, up=True):
         if scale == 0:
             if up:
