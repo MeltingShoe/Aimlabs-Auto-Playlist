@@ -245,7 +245,6 @@ class scoreDB:
         self.processScores()
         if len(self.unreadScores) > 0:
             a = self.unreadScores.pop(0)
-            print('a', a)
             return a
         else:
             return False

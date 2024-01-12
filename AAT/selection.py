@@ -34,7 +34,6 @@ class taskSet:
     def processNewScores(self):
         while True:
             score = self.db()
-            print(score)
             if score == False:
                 break
             else:
@@ -50,7 +49,6 @@ class taskSet:
         for row in self.trainers:
             for task in row:
                 if score['name'] == task['name']:
-                    # print(score)
                     score['x'] = task['x']
                     score['y'] = task['y']
                     return score
@@ -219,9 +217,9 @@ class taskSet:
 
         running = True
         while running:
-            #print('Launching '+tName)
+            print('Launching '+tName)
             launchTask(ID)
-            #print('type YES when done')
+            print('type YES when done')
             inv = input()
             if inv != 'YES':
                 continue
@@ -240,9 +238,6 @@ class taskSet:
     @log
     def convolve(self, x, y, performance):
         stepLen = self.setStepLen()
-        if self.debug:
-            #print('ABOUT TO CONVOLVE, INPUT VALUES:')
-            self.printMatrix(self.getMatrix('lockVal'))
         base = self.trainers[y][x]['lockVal']
         step = performance - base
         step = step * stepLen
@@ -256,9 +251,7 @@ class taskSet:
         for rowIndex, row in enumerate(self.trainers):
             line = []
             for itemIndex, item in enumerate(row):
-
                 adjustment = self.shiftConv(itemIndex, rowIndex, x, y, step)
-                # print(itemIndex, rowIndex, adjustment)
                 adjustment = abs(adjustment) * sign
                 weightChanceMultiplier = self.wmFunc(
                     self.trainers[rowIndex][itemIndex]['lockVal'])
@@ -272,28 +265,12 @@ class taskSet:
                 line.append(adjustment)
             out.append(line)
 
-        if self.debug:
-
-            #print('WE HAVE CONVOLVED, OUTPUT VALUES:')
-            self.printMatrix(self.getMatrix('lockVal'))
-
-            #print('ADJUSTMENT VALUES:')
-            self.printMatrix(out)
-        return out
-
-    @log
-    def printMatrix(self, matrix):
-        for row in matrix:
-            pass
-            # print(row)
-
     @log
     def setBaseWeights(self):
         for row in self.trainers:
             for item in row:
                 val = abs(item['lockVal'])
                 w = self.weightFunc(val)
-                #print('lockVal', val, 'weight', w)
                 item['baseWeight'] = w
 
     @log
@@ -303,7 +280,6 @@ class taskSet:
             return True
         x = self.runsSinceBM / self.maxIntervalBM
         w = self.decayBM.getOutput(x)
-        #print('runs since', self.runsSinceBM, 'bm chance: ', w)
         point = random.randint(0, 1000000)/1000000
         return point < w
 
