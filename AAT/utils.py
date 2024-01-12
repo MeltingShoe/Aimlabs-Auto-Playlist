@@ -32,35 +32,6 @@ def format_nested_list(nested_list):
     return formatted_list
 
 
-def isMatrix(input_list):
-    if not isinstance(input_list, list):
-        return False
-
-    if not all(isinstance(sublist, list) for sublist in input_list):
-        return False
-
-    if not input_list:
-        # Empty list is considered valid
-        return True
-
-    length_of_first_sublist = len(input_list[0])
-
-    return all(len(sublist) == length_of_first_sublist for sublist in input_list[1:])
-
-
-def processMatrix(input_matrix):
-    if not isMatrix(input_matrix):
-        raise ValueError("Input is not a valid matrix")
-
-    formatted_nested_list = format_nested_list(input_matrix)
-
-    # Applying format_list_as_table to every sublist and concatenating the results
-    formatted_table = ''.join(format_list_as_table(sublist)
-                              for sublist in formatted_nested_list)
-
-    return formatted_table
-
-
 def configPath(path):
     exists = os.path.isfile(os.path.abspath(os.path.join(
         os.getcwd(), os.pardir, 'config', path)))
