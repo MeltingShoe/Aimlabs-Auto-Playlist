@@ -1,7 +1,7 @@
 from container import container
 from logger import log, logLevel, debug, info, warning, error, critical
 import time
-from utils import devBlock, isMatrix, format_list_as_table, processMatrix
+from utils import devBlock, format_list_as_table
 import statistics
 import traceback
 
