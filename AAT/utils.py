@@ -76,7 +76,7 @@ class rawDB:
         names = []
         for run in self.data:
             name = run[3]
-            if 'meltingshoe' in name:
+            if ('meltingshoe' in name) or ('hartrean' in name):
                 y = run[12]
                 y = ast.literal_eval(y)
                 out = {
