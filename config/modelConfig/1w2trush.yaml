@@ -1,3 +1,4 @@
+convConfigFileName: '1w2tConvMatrix.yaml'
 benchmarks:
 - ID: 3135124191
   difficulty: BM
@@ -164,7 +165,7 @@ maxIntervalBM: 12
 minChance: 0.03
 stepLen: 0.67
 scoreFunc: '1W6TPOP'
-taskSetName: '1W6TPOP'
+taskSetName: '1w2tRUSH'
 trainers:
 - - ID: 3135123147
     difficulty: 3S
