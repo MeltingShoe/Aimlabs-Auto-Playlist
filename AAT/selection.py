@@ -29,6 +29,85 @@ class taskSet:
         self.processNewScores()
 
     @log
+    def runTask(self):
+        task = self.getTask()
+        ID = task['ID']
+        tName = self.config['taskSetName'] + ' ' + \
+            task['size'] + 'R ' + task['difficulty'] + 'T'
+        running = True
+        while running:
+            print('Launching '+tName)
+            launchTask(ID)
+            print('type YES when done')
+            inv = input()
+            if inv != 'YES':
+                continue
+            return self.processNewScores()
+
+    @log
+    def getTask(self):
+        runBM = self.trainOrBM()
+        self.lastBM = runBM
+        if runBM:
+            self.runsSinceBM = 0
+            return self.getBMTask()
+        else:
+            self.runsSinceBM += 1
+            return self.getTrainingTask()
+
+    @log
+    def trainOrBM(self):
+        if self.runsSinceBM == -1:
+            self.runsSinceBM += 1
+            return True
+        x = self.runsSinceBM / self.maxIntervalBM
+        w = self.decayBM.getOutput(x)
+        point = random.randint(0, 1000000)/1000000
+        return point < w
+
+    @log
+    def getBMTask(self):
+        index = random.randint(0, (len(self.BMs)-1))
+        return self.BMs[index]
+
+    @log
+    def getTrainingTask(self):
+        x, y = self.selectTraining()
+        return self.trainers[y][x]
+
+    @log
+    def selectTraining(self):
+        wMatrix = self.getWeights()
+        total = 0
+        for row in wMatrix:
+            for item in row:
+                total += item
+        key = random.uniform(0, total)
+        x = 0
+        y = 0
+        for row in wMatrix:
+            x = 0
+            for item in row:
+                if key < item:
+                    return x, y
+                key -= item
+                x += 1
+            y += 1
+        raise Exception('selection failed somehow')
+
+    @log
+    def getWeights(self):
+        out = []
+        for row in self.trainers:
+            line = []
+            for item in row:
+                val = abs(item['lockVal'])
+                w = self.weightFunc(val)
+                line.append(w)
+            out.append(line)
+        return out
+
+    @log
     def processNewScores(self):
         while True:
             score = self.db()
@@ -36,6 +115,13 @@ class taskSet:
                 break
             else:
                 self.processScore(score)
+
+    @log
+    def processScore(self, score):
+        score = self.processScoreXY(score)
+        convOut = self.processResults(score, score['x'], score['y'])
+        self.runs += 1
+        return convOut
 
     @log
     def processScoreXY(self, score):
@@ -52,21 +138,16 @@ class taskSet:
                     return score
 
     @log
-    def processScore(self, score):
-        score = self.processScoreXY(score)
-        convOut = self.processResults(score, score['x'], score['y'])
-        self.runs += 1
+    def processResults(self, taskData, x, y):
+        if y == -1:
+            return self.processBM(taskData, x)
+        score = self.parseScore(taskData)
+        convOut = self.convolve(x, y, score)
         return convOut
 
     @log
-    def getNameList(self):
-        out = []
-        for task in self.BMs:
-            out.append(task['name'])
-        for row in self.trainers:
-            for task in row:
-                out.append(task['name'])
-        return out
+    def processBM(self, taskData, x):
+        self.BMs[x]['score'] = taskData['score']
 
     @log
     def parseScore(self, taskData):
@@ -91,6 +172,34 @@ class taskSet:
         return performance
 
     @log
+    def convolve(self, x, y, performance):
+        stepLen = self.setStepLen()
+        base = self.trainers[y][x]['lockVal']
+        step = performance - base
+        step = step * stepLen
+        lockValMatrix = self.getMatrix('lockVal')
+        stepMatrix = np.ones((self.conv.xLen, self.conv.yLen))
+        stepMatrix = self.conv(stepMatrix, {'x': x, 'y': y})
+        stepMatrix = stepMatrix * step
+        lockValMatrix = lockValMatrix + stepMatrix
+        self.setMatrix('lockVal', lockValMatrix)
+        return lockValMatrix
+
+    @log
+    def setStepLen(self):
+        return self.stepFunc(self.runs)
+
+    @log
+    def getNameList(self):
+        out = []
+        for task in self.BMs:
+            out.append(task['name'])
+        for row in self.trainers:
+            for task in row:
+                out.append(task['name'])
+        return out
+
+    @log
     def getMatrix(self, key):
         out = []
         for row in self.trainers:
@@ -113,121 +222,6 @@ class taskSet:
                 x += 1
             y += 1
         return self.trainers
-
-    @log
-    def setFinalWeights(self):
-        self.setBaseWeights()
-        wL = self.getMatrix('baseWeight')
-        self.setMatrix('finalWeight', wL)
-
-        return wL
-
-    @log
-    def selectTraining(self):
-        wMatrix = self.setFinalWeights()
-        total = 0
-        for row in wMatrix:
-            for item in row:
-                total += item
-        key = random.uniform(0, total)
-        x = 0
-        y = 0
-
-        for row in wMatrix:
-            x = 0
-            for item in row:
-                if key < item:
-                    return x, y
-                key -= item
-                x += 1
-            y += 1
-        raise Exception('selection failed somehow')
-
-    @log
-    def processBM(self, taskData, x):
-        self.BMs[x]['score'] = taskData['score']
-
-    @log
-    def processResults(self, taskData, x, y):
-        if y == -1:
-            return self.processBM(taskData, x)
-        score = self.parseScore(taskData)
-        convOut = self.convolve(x, y, score)
-        return convOut
-
-    @log
-    def getTrainingTask(self):
-        x, y = self.selectTraining()
-        return self.trainers[y][x]
-
-    @log
-    def getBMTask(self):
-        index = random.randint(0, (len(self.BMs)-1))
-        return self.BMs[index]
-
-    @log
-    def getTask(self):
-        runBM = self.trainOrBM()
-        self.lastBM = runBM
-        if runBM:
-            self.runsSinceBM = 0
-            return self.getBMTask()
-        else:
-            self.runsSinceBM += 1
-            return self.getTrainingTask()
-
-    @log
-    def runTask(self):
-        task = self.getTask()
-        ID = task['ID']
-        tName = self.config['taskSetName'] + ' ' + \
-            task['size'] + 'R ' + task['difficulty'] + 'T'
-
-        running = True
-        while running:
-            print('Launching '+tName)
-            launchTask(ID)
-            print('type YES when done')
-            inv = input()
-            if inv != 'YES':
-                continue
-            return self.processNewScores()
-
-    @log
-    def setStepLen(self):
-        return self.stepFunc(self.runs)
-
-    @log
-    def convolve(self, x, y, performance):
-        stepLen = self.setStepLen()
-        base = self.trainers[y][x]['lockVal']
-        step = performance - base
-        step = step * stepLen
-        lockValMatrix = self.getMatrix('lockVal')
-        stepMatrix = np.ones((self.conv.xLen, self.conv.yLen))
-        stepMatrix = self.conv(stepMatrix, {'x': x, 'y': y})
-        stepMatrix = stepMatrix * step
-        lockValMatrix = lockValMatrix + stepMatrix
-        self.setMatrix('lockVal', lockValMatrix)
-        return lockValMatrix
-
-    @log
-    def setBaseWeights(self):
-        for row in self.trainers:
-            for item in row:
-                val = abs(item['lockVal'])
-                w = self.weightFunc(val)
-                item['baseWeight'] = w
-
-    @log
-    def trainOrBM(self):
-        if self.runsSinceBM == -1:
-            self.runsSinceBM += 1
-            return True
-        x = self.runsSinceBM / self.maxIntervalBM
-        w = self.decayBM.getOutput(x)
-        point = random.randint(0, 1000000)/1000000
-        return point < w
 
 
 def main():
