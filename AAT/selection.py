@@ -154,13 +154,6 @@ class taskSet:
         for row in wMatrix:
             for item in row:
                 total += item
-        if self.debug:
-            wm = wMatrix
-            for row in wm:
-                line = []
-                for item in row:
-                    percent = item / total
-                    line.append(percent)
         key = random.uniform(0, total)
         x = 0
         y = 0
