@@ -15,9 +15,6 @@ def runtime():
 
 @log
 def main():
-    a = [[1, 2, 3], [3, 4, 4], [5, 6, 4], [7, 8, 4]]
-    b = [1, 2, 3, 4, 5]
-    info(a)
     try:
         runtime()
     except KeyboardInterrupt:

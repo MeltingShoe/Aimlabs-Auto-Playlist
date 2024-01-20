@@ -1,6 +1,7 @@
 from functionGenerator import func
 from utils import saveYAML, openYAML, launchTask, scoreDB, rawDB
 from logger import log, logLevel, debug, info, warning, error, critical
+from convolution import convolution
 import random
 import numpy
 
@@ -10,6 +11,7 @@ class taskSet:
         self.debug = True
         self.runs = 0
         self.config = openYAML(configPath)
+        self.conv = convolution(self.config['convConfigFileName'])
         self.wmFunc = func(self.config['weightChanceMultiplier'])
         self.BMs = self.config['benchmarks']
         self.trainers = self.config['trainers']
@@ -234,29 +236,13 @@ class taskSet:
         base = self.trainers[y][x]['lockVal']
         step = performance - base
         step = step * stepLen
-        out = []
-        if performance > 0:
-            sign = 1
-            self.convPositive = True
-        else:
-            sign = -1
-            self.convPositive = False
-        for rowIndex, row in enumerate(self.trainers):
-            line = []
-            for itemIndex, item in enumerate(row):
-                adjustment = self.shiftConv(itemIndex, rowIndex, x, y, step)
-                adjustment = abs(adjustment) * sign
-                weightChanceMultiplier = self.wmFunc(
-                    self.trainers[rowIndex][itemIndex]['lockVal'])
-                adjustment = adjustment * weightChanceMultiplier
-                self.trainers[rowIndex][itemIndex]['lockVal'] += adjustment
-                if self.trainers[rowIndex][itemIndex]['lockVal'] < -1:
-                    self.trainers[rowIndex][itemIndex]['lockVal'] = -1
-                elif self.trainers[rowIndex][itemIndex]['lockVal'] > 1:
-                    self.trainers[rowIndex][itemIndex]['lockVal'] = 1
-
-                line.append(adjustment)
-            out.append(line)
+        lockValMatrix = self.getMatrix('lockVal')
+        stepMatrix = np.ones((self.conv.xLen, self.conv.yLen))
+        stepMatrix = self.conv(stepMatrix, {'x': x, 'y': y})
+        stepMatrix = stepMatrix * step
+        lockValMatrix = lockValMatrix + stepMatrix
+        self.setMatrix('lockVal', lockValMatrix)
+        return lockValMatrix
 
     @log
     def setBaseWeights(self):
