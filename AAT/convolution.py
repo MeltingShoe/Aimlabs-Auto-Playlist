@@ -17,8 +17,20 @@ class convolution:
         self.yLen = config['yLen']
 
     @log
+    # gonna try to do some type polymorphism, if we get a full array do a full conv but if we just get 1 number then just get it's 1 step
     def __call__(self, npArray, origin):
-        return self.calcConvolution(npArray, origin)
+        if type(npArray) == numpy.ndarray:
+            return self.calcConvolution(npArray, origin)
+        elif type(npArray) == dict:
+            return self.calcAdjustment(npArray, origin)
+        else:
+            critical('BRO YOU PUT THE WRONG TYPE IN CONV, HAS TO BE NUM OR NDARRAY')
+            raise TypeError
+
+    @log
+    def calcAdjustment(self, data, origin):
+        midX = self.xLen//2
+        midY = self.yLen//2
 
     @log
     def cutMatrix(self, origin):
