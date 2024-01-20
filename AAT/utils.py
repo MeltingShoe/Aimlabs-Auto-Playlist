@@ -76,7 +76,7 @@ class rawDB:
         names = []
         for run in self.data:
             name = run[3]
-            if ('meltingshoe' in name) or ('hartrean' in name):
+            if self.checkValid(run):
                 y = run[12]
                 y = ast.literal_eval(y)
                 out = {
@@ -133,7 +133,7 @@ class rawDB:
     @log
     def checkValid(self, score):
         name = score[3]
-        if 'meltingshoe' in name:
+        if ('meltingshoe' in name) or ('hartrean' in name):
             return True
         else:
             return False
@@ -143,8 +143,7 @@ class rawDB:
         self.readDB()  # eventually change this to just select items over a certain ID, prolly not hard with SQL. Could be part of the readDB()
         while self.lastScore < len(self.data):
             score = self.data[self.lastScore]
-            valid = self.checkValid(score)
-            if valid:
+            if self.checkValid(score):
                 self.addScore(score)
             self.lastScore += 1
 
