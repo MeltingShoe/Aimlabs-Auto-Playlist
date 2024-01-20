@@ -12,19 +12,15 @@ class taskSet:
         self.runs = 0
         self.config = openYAML(configPath)
         self.conv = convolution(self.config['convConfigFileName'])
-        self.wmFunc = func(self.config['weightChanceMultiplier'])
         self.BMs = self.config['benchmarks']
         self.trainers = self.config['trainers']
         self.runsSinceBM = -3
         self.maxIntervalBM = self.config['maxIntervalBM']
         self.decayBM = func(self.config['decayBM'])
-        self.convXfnc = func(self.config['convX'])
-        self.convYfnc = func(self.config['convY'])
         self.scoreFunc = self.config['scoreFunc']
         self.performanceFunction = func(self.config['performanceFunction'])
         self.stats = {}
         self.lastBM = False
-        self.convPositive = True
         nameList = self.getNameList()
         mainConfig = openYAML('config.yaml')
         self.db = scoreDB(nameList, resetPoint=mainConfig['resetPoint'])
@@ -73,22 +69,6 @@ class taskSet:
         return out
 
     @log
-    def convX(self, x):
-        if self.convPositive:
-            return self.convXfnc(x)
-        else:
-            x = x * -1
-            return self.convXfnc(x)
-
-    @log
-    def convY(self, x):
-        if self.convPositive:
-            return self.convYfnc(x)
-        else:
-            x = x * -1
-            return self.convYfnc(x)
-
-    @log
     def parseScore(self, taskData):
         if self.scoreFunc == '1W6TPOP':
             return self.score1w6tPOP(taskData)
@@ -133,13 +113,6 @@ class taskSet:
                 x += 1
             y += 1
         return self.trainers
-
-    @log
-    def convFilter(self, x, y, step):
-        xW = self.convX(x)
-        yW = self.convY(y)
-        w = xW * yW
-        return step * w
 
     @log
     def setFinalWeights(self):
@@ -219,12 +192,6 @@ class taskSet:
             if inv != 'YES':
                 continue
             return self.processNewScores()
-
-    @log
-    def shiftConv(self, curX, curY, tarX, tarY, step):
-        x = curX - tarX
-        y = curY - tarY
-        return self.convFilter(x, y, step)
 
     @log
     def setStepLen(self):
