@@ -4,6 +4,7 @@ from logger import log, logLevel, debug, info, warning, error, critical
 
 
 class func:
+    @log
     def __init__(self, definition):
         self.definition = definition
         self.inputRanges = definition['inputRanges']

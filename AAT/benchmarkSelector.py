@@ -3,6 +3,7 @@ from functionGenerator import func
 
 
 class chooseBenchmarkOrTask:
+    @log
     def __init__(self, config):
         self.decayFunction = func(config['decayBM'])
         self.runsSinceBM = config['startRuns'] if config['startRuns'] is not None else -3

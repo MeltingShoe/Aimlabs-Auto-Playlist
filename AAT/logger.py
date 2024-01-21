@@ -4,6 +4,7 @@ import functools
 import os
 import datetime
 import yaml
+import time
 
 
 def format_list_as_table(row):
@@ -163,6 +164,7 @@ def log(level_or_func=None):
             # Call the wrapped function
             result = inner_func(*args, **kwargs)
 
+            # Before
             # Log and print return value (args_return_level)
             return_msg = f"Return value: {result}"
             logger_instance.logMsg(args_return_level, return_msg)

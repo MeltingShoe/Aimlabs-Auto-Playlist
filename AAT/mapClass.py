@@ -6,6 +6,7 @@ from maxStepFunc import step
 
 
 class aatMap:
+    @log
     def __init__(self, mapData):
         self.DBname = mapData['name']
         self.ID = mapData['ID']
@@ -76,6 +77,7 @@ class aatMap:
 
 
 class mapFactory:
+    @log
     def __init__(self, taskSetData):
         self.conv = convolution(taskaSetData['convolutionFunction'])
         self.performanceFunction = func(taskSetData['performanceFunction'])
@@ -83,9 +85,11 @@ class mapFactory:
         self.weightFunc = func(taskSetData['weightFunc'])
         self.taskName = taskSetData['taskSetName']
 
+    @log
     def __call__(self, mapData):
         return self.createMap(mapData)
 
+    @log
     def createMap(self, mapData):
         mapData['taskName'] = self.taskName
         mapData['convolutionFunction'] = self.conv
@@ -95,5 +99,6 @@ class mapFactory:
         mapObject = aatMap(mapData)
         return mapObject
 
+    @log
     def createBenchmark(self):
         pass

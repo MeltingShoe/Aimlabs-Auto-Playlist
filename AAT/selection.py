@@ -3,10 +3,11 @@ from utils import saveYAML, openYAML, launchTask, scoreDB, rawDB
 from logger import log, logLevel, debug, info, warning, error, critical
 from convolution import convolution
 import random
-import numpy
+import numpy as np
 
 
 class taskSet:
+    @log
     def __init__(self, configPath):
         self.debug = True
         self.runs = 0
