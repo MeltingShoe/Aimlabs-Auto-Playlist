@@ -1,10 +1,10 @@
 import math
 import matplotlib.pyplot as plt
-from logger import log, logLevel, debug, info, warning, error, critical, logInit
+from logger import log, logLevel, debug, info, warning, error, critical
 
 
 class func:
-    @logInit
+    @log
     def __init__(self, definition):
         self.definition = definition
         self.inputRanges = definition['inputRanges']

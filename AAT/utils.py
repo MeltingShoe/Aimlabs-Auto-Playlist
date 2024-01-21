@@ -3,7 +3,7 @@ import os
 import sqlite3
 import webbrowser
 import ast
-from logger import log, logLevel, debug, info, warning, error, critical, logInit
+from logger import log, logLevel, debug, info, warning, error, critical
 
 
 @log
@@ -59,7 +59,7 @@ def devBlock(func):
 
 
 class rawDB:
-    @logInit
+    @log
     def __init__(self, resetPoint=0):
         self.dbPath = os.path.abspath(os.path.join(os.getenv(
             "APPDATA"), os.pardir, "LocalLow\\statespace\\aimlab_tb\\klutch.bytes"))
@@ -172,6 +172,7 @@ class rawDB:
 
 
 class scoreDB:
+    @log
     def __init__(self, names, resetPoint=0):
         self.db = rawDB(resetPoint=resetPoint)
         self.taskNames = names
@@ -236,6 +237,7 @@ def YN(prompt):
     return out
 
 
+@log
 def weightedSelect(inputList):
     total = 0
     for item in inputList:

@@ -19,7 +19,7 @@ class convolution:
     @log
     # gonna try to do some type polymorphism, if we get a full array do a full conv but if we just get 1 number then just get it's 1 step
     def __call__(self, npArray, origin):
-        if type(npArray) == numpy.ndarray:
+        if type(npArray) == np.ndarray:
             return self.calcConvolution(npArray, origin)
         elif type(npArray) == dict:
             return self.calcAdjustment(npArray, origin)
