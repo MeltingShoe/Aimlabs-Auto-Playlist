@@ -4,6 +4,7 @@ from logger import log, logLevel, debug, info, warning, error, critical
 
 
 class convolution:
+    @log
     def __init__(self, configFileName):  # you can feed a dict as the arg to give a config directly
         if type(configFileName) is str:
             config = openYAML(configFileName)

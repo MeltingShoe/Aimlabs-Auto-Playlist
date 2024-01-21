@@ -4,6 +4,7 @@ from benchmarkSelector import chooseBenchmarkOrTask
 
 
 class taskSet:
+    @log
     def __init__(self, taskData):
         self.trainOrBenchmark = chooseBenchmarkOrTask(taskData)
         mapMaker = mapFactory(taskData)

@@ -7,6 +7,7 @@ import numpy as np
 
 
 class taskSet:
+    @log
     def __init__(self, configPath):
         self.debug = True
         self.runs = 0

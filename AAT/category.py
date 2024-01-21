@@ -3,16 +3,19 @@ from utils import openYAML
 
 
 class categorySet:
+    @log
     def __init__(self, config):
         self.config = openYAML(config)
         self.taskConfigs = self.config['taskConfigs']
         self.tasks = []
         self.initTasks()
 
+    @log
     def initTasks(self):
         for task in self.taskConfigs:
             self.tasks.append(taskSet(task))
 
+    @log
     def run(self):
         return self.tasks[0].runTask()
 
