@@ -3,7 +3,7 @@ import os
 import sqlite3
 import webbrowser
 import ast
-from logger import log, logLevel, debug, info, warning, error, critical
+from logger import log, logLevel, debug, info, warning, error, critical, logInit
 
 
 @log
@@ -59,6 +59,7 @@ def devBlock(func):
 
 
 class rawDB:
+    @logInit
     def __init__(self, resetPoint=0):
         self.dbPath = os.path.abspath(os.path.join(os.getenv(
             "APPDATA"), os.pardir, "LocalLow\\statespace\\aimlab_tb\\klutch.bytes"))

@@ -4,6 +4,7 @@ import functools
 import os
 import datetime
 import yaml
+import time
 
 
 def format_list_as_table(row):
@@ -175,6 +176,45 @@ def log(level_or_func=None):
 
         return wrapper
 
+    # Handle the case when decorator is used without providing a level
+    if func is not None:
+        return decorator(func)
+    return decorator
+
+
+def logInit(level_or_func=None):
+    if callable(level_or_func):  # No level provided, only the function
+        level = None
+        func = level_or_func
+    else:
+        level = level_or_func
+        func = None
+
+    def decorator(inner_func):
+        @functools.wraps(inner_func)
+        def wrapper(*args, **kwargs):
+            # Set the level for entry and exit messages
+            entry_exit_level = level if level is not None else 2
+
+            # Set the level for args, kwargs, and return value messages
+            args_return_level = level if level is not None else 1
+
+            # Log function entry (entry_exit_level)
+            entry_msg_func = f"Entering {inner_func.__name__}"
+            logger_instance.logMsg(entry_exit_level, entry_msg_func)
+
+            # Log function entry with arguments and keyword arguments (args_return_level)
+            entry_msg_args = f"Args: {args}, kwargs: {kwargs}"
+            logger_instance.logMsg(args_return_level, entry_msg_args)
+
+            # Call the wrapped function
+            result = inner_func(*args, **kwargs)
+
+            # Log function exit (entry_exit_level)
+            exit_msg = f"Exiting {inner_func.__name__}"
+            logger_instance.logMsg(entry_exit_level, exit_msg)
+            return result
+        return wrapper
     # Handle the case when decorator is used without providing a level
     if func is not None:
         return decorator(func)
