@@ -94,6 +94,3 @@ class mapFactory:
         mapData['weightFunc'] = self.weightFunc
         mapObject = aatMap(mapData)
         return mapObject
-
-    def createBenchmark(self):
-        pass

@@ -118,10 +118,11 @@ class rawDB:
 
     @log
     def readDB(self):
+
         con = sqlite3.connect(self.dbPath)
         cur = con.cursor()
-        # right here make it select things after last ID and update ID
-        res = cur.execute("SELECT * FROM TaskData")
+        res = cur.execute(
+            "SELECT * FROM TaskData WHERE taskName LIKE '%meltingshoe%'")
         out = res.fetchall()
         self.data = out
         return out
