@@ -1,6 +1,8 @@
 prints: true
-printLevel: 3
+printLevel: 2
 logs: true
 logLevel: 1
 blockTaskLaunch: true
 confirmToRunBlockedFunctions: true
+savePath: savedModelState.pkl
+loadEnable: false

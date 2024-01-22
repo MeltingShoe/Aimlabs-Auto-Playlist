@@ -1,3 +1,4 @@
+convConfigFileName: '1w2tConvMatrix.yaml'
 benchmarks:
 - ID: 3129171790
   difficulty: BM

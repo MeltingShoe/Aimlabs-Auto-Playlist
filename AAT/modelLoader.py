@@ -3,14 +3,17 @@ import pickle
 import os
 from container import container
 from readDB import readAimlabsDB
-
+from utils import openYAML
+config = openYAML('devConfig.yaml')
 savePath = os.path.abspath(os.path.join(
-    os.getcwd(), os.pardir, 'savedModelState.pkl'))
+    os.getcwd(), os.pardir, config['savePath']))
+
+loadEnable = config['loadEnable']
 
 
 @log
 def checkSave():
-    return os.path.isfile(savePath)
+    return os.path.isfile(savePath) * loadEnable
 
 
 @log
