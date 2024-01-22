@@ -233,6 +233,9 @@ def YN(prompt):
         return True
     if a == 'n' or a == 'no':
         return False
+    if a == 'q' or a == 'quit':
+        if YN('Would you like to quit?'):
+            quit()
     print('invalid input. Enter Y or N')
     out = YN(prompt)
     return out

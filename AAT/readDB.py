@@ -12,7 +12,9 @@ class readAimlabsDB:
         config = openYAML('userConfig.yaml')
         self.dbPath = os.path.abspath(os.path.join(os.getenv(
             "APPDATA"), os.pardir, config['dbPath']))
-        self.readIndex = 0  # this is how much of the db we've already parsed.
+        mainConfig = openYAML('config.yaml')
+        # this is how much of the db we've already parsed.
+        self.readIndex = mainConfig['resetPoint']
         self.con = sqlite3.connect(self.dbPath)
         self.cur = self.con.cursor()
         self.scoreData = {}
@@ -68,7 +70,7 @@ class readAimlabsDB:
 
 def main():
     db = readAimlabsDB()
-    out = db(startID=1550)
+    out = db(startID=1570)
     for item in out:
         warning(out[item])
 
