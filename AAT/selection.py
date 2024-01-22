@@ -26,6 +26,7 @@ class taskSet:
         self.lastBM = False
         self.stepFunc = func(self.config['stepFunc'])
         self.weightFunc = func(self.config['weightFunc'])
+        self.namesList = self.getNameList()
         self.processNewScores(db)
 
     @log
@@ -109,7 +110,7 @@ class taskSet:
 
     @log
     def processNewScores(self, db):
-        data = db(startID=self.lastReadID)
+        data = db(self.namesList, startID=self.lastReadID)
         scores = data['scores']
         self.lastReadID = data['lastID']
         for key in scores:

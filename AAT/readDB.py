@@ -20,8 +20,8 @@ class readAimlabsDB:
         self.scoreData = {}
 
     @log
-    def __call__(self, startID=0):
-        return self.getScores(startID)
+    def __call__(self, nameList, startID=0):
+        return self.getScores(nameList, startID)
 
     @log
     def getLastID(self):
@@ -31,10 +31,10 @@ class readAimlabsDB:
         return out
 
     @log
-    def getScores(self, startID=0):
+    def getScores(self, nameList, startID=0):
         lastID = self.getLastID()
         if lastID > self.readIndex:
-            rawScores = self.readDB()
+            rawScores = self.readDB(nameList)
             newScores = []
             for score in rawScores:
                 score = self.packageOutput(score)
@@ -53,9 +53,18 @@ class readAimlabsDB:
         return {'scores': self.scoreData, 'lastID': lastID}
 
     @log
-    def readDB(self):
-        res = self.cur.execute(
-            "SELECT taskId, klutchId, createDate, taskName, score, performance FROM TaskData WHERE taskId > " + str(self.readIndex) + " AND taskName LIKE '%meltingshoe%' OR taskId > " + str(self.readIndex) + " AND taskName LIKE '%hartrean%'")
+    def list2list(self, nameList):  # need to convert our namelist to a string
+        nameList = str(nameList)
+        nameList = nameList[1:-1]
+        return '(' + nameList + ')'
+
+    @log
+    def readDB(self, nameList):
+        nameList = self.list2list(nameList)
+        columns = 'taskId, klutchId, createDate, taskName, score, performance'
+        query = "SELECT %s FROM TaskData WHERE taskId > %s AND taskName IN %s" % (
+            columns, self.readIndex, nameList)
+        res = self.cur.execute(query)
         out = res.fetchall()
         self.readIndex = self.getLastID()
         return out
