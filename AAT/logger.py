@@ -181,7 +181,7 @@ def log(level_or_func=None):
             logger_instance.logMsg(args_return_level, return_msg)
 
             # Log function exit (entry_exit_level)
-            exit_msg = f"Exiting {inner_func.__name__}.  Execution took {elapsed} seconds"
+            exit_msg = f"Exiting {inner_func.__name__}.  Execution took {elapsed: 0.2f} seconds"
             logger_instance.logMsg(entry_exit_level, exit_msg)
 
             return result
