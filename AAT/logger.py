@@ -168,10 +168,10 @@ def log(level_or_func=None):
             entry_msg_args = f"Args: {args}, kwargs: {kwargs}"
             logger_instance.logMsg(args_return_level, entry_msg_args)
 
-            start = time.time()
+            start = time.perf_counter()
             # Call the wrapped function
             result = inner_func(*args, **kwargs)
-            end = time.time()
+            end = time.perf_counter()
             elapsed = end - start
             entry_exit_level = 4 if elapsed > config[
                 'errorTime'] else 3 if elapsed > config['warningTime'] else entry_exit_level
