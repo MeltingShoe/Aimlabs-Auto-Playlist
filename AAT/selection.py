@@ -5,7 +5,6 @@ from convolution import convolution
 import random
 import numpy as np
 from readDB import readAimlabsDB
-import time
 
 
 class taskSet:
@@ -28,11 +27,7 @@ class taskSet:
         self.db = readAimlabsDB()
         self.stepFunc = func(self.config['stepFunc'])
         self.weightFunc = func(self.config['weightFunc'])
-        start = time.time()
         self.processNewScores()
-        end = time.time()
-        warning('TIME TO PROCESS RESULT')
-        warning(end-start)
 
     @log
     def runTask(self):
@@ -115,28 +110,16 @@ class taskSet:
 
     @log
     def processNewScores(self):
-        start = time.time()
         data = self.db(startID=self.lastReadID)
-        end = time.time()
-        info('TIME TO PULL FROM DB')
-        info(end-start)
         scores = data['scores']
         self.lastReadID = data['lastID']
         for key in scores:
             score = scores[key]
-            start = time.time()
             self.processScore(score)
-            end = time.time()
-            info('TIME TO PROCESS')
-            info(end-start)
 
     @log
     def processScore(self, score):
-        start = time.time()
         score = self.processScoreXY(score)
-        end = time.time()
-        info('TIME TO GET XY')
-        info(end-start)
         if score is False:
             return False
         convOut = self.processResults(score, score['x'], score['y'])

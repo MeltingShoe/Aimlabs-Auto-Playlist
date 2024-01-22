@@ -229,6 +229,8 @@ def YN(prompt):
     print(prompt, '(Y/N)')
     a = input()
     a = a.casefold()
+    if prompt == 'Would you like to quit?' and a != 'no' and a != 'n':
+        return True
     if a == 'y' or a == 'yes':
         return True
     if a == 'n' or a == 'no':
