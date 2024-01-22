@@ -134,6 +134,13 @@ class Logger:
 
 
 logger_instance = Logger()
+path = os.path.abspath(os.path.join(
+    os.getcwd(), os.pardir, 'config//modelConfig', 'config.yaml'))
+with open(path, "r") as stream:
+    try:
+        config = yaml.safe_load(stream)
+    except yaml.YAMLError as exc:
+        print(exc)
 
 
 def log(level_or_func=None):
@@ -161,16 +168,20 @@ def log(level_or_func=None):
             entry_msg_args = f"Args: {args}, kwargs: {kwargs}"
             logger_instance.logMsg(args_return_level, entry_msg_args)
 
+            start = time.time()
             # Call the wrapped function
             result = inner_func(*args, **kwargs)
-
+            end = time.time()
+            elapsed = end - start
+            entry_exit_level = 4 if elapsed > config[
+                'errorTime'] else 3 if elapsed > config['warningTime'] else entry_exit_level
             # Before
             # Log and print return value (args_return_level)
             return_msg = f"Return value: {result}"
             logger_instance.logMsg(args_return_level, return_msg)
 
             # Log function exit (entry_exit_level)
-            exit_msg = f"Exiting {inner_func.__name__}"
+            exit_msg = f"Exiting {inner_func.__name__}.  Execution took {elapsed} seconds"
             logger_instance.logMsg(entry_exit_level, exit_msg)
 
             return result

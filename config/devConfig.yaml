@@ -1,6 +1,6 @@
 prints: true
 printLevel: 3
 logs: true
-logLevel: 3
+logLevel: 1
 blockTaskLaunch: true
 confirmToRunBlockedFunctions: true

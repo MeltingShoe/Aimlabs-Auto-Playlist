@@ -1,3 +1,5 @@
 categoryConfigs:
 - staticConfig.yaml
-resetPoint: 1600
+resetPoint: 0
+warningTime: 5
+errorTime: 15
