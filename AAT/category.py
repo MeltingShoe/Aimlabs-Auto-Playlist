@@ -5,20 +5,20 @@ from logger import log, logLevel, debug, info, warning, error, critical
 
 class categorySet:
     @log
-    def __init__(self, config):
+    def __init__(self, config, db):
         self.config = openYAML(config)
         self.taskConfigs = self.config['taskConfigs']
         self.tasks = []
-        self.initTasks()
+        self.initTasks(db)
 
     @log
-    def initTasks(self):
+    def initTasks(self, db):
         for task in self.taskConfigs:
-            self.tasks.append(taskSet(task))
+            self.tasks.append(taskSet(task, db))
 
     @log
-    def run(self):
-        return self.tasks[0].runTask()
+    def run(self, db):
+        return self.tasks[0].runTask(db)
 
 
 def main():

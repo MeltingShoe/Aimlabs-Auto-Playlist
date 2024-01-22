@@ -1,16 +1,18 @@
-from container import container
+
 from logger import log, logLevel, debug, info, warning, error, critical
 import time
 from utils import devBlock
-import statistics
 import traceback
+from modelLoader import loadModel
+from readDB import readAimlabsDB
 
 
 @devBlock
 def runtime():
-    rt = container()
+    db = readAimlabsDB()
+    rt = loadModel()
     while True:
-        rt.run()
+        rt.run(db)
 
 
 @log

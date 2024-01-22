@@ -1,5 +1,5 @@
 from functionGenerator import func
-from utils import saveYAML, openYAML, launchTask, scoreDB
+from utils import saveYAML, openYAML, launchTask
 from logger import log, logLevel, debug, info, warning, error, critical
 from convolution import convolution
 import random
@@ -9,7 +9,7 @@ from readDB import readAimlabsDB
 
 class taskSet:
     @log
-    def __init__(self, configPath):
+    def __init__(self, configPath, db):
         self.lastReadID = 0
         self.debug = True
         self.runs = 0
@@ -24,13 +24,12 @@ class taskSet:
         self.performanceFunction = func(self.config['performanceFunction'])
         self.stats = {}
         self.lastBM = False
-        self.db = readAimlabsDB()
         self.stepFunc = func(self.config['stepFunc'])
         self.weightFunc = func(self.config['weightFunc'])
-        self.processNewScores()
+        self.processNewScores(db)
 
     @log
-    def runTask(self):
+    def runTask(self, db):
         task = self.getTask()
         ID = task['ID']
         tName = self.config['taskSetName'] + ' ' + \
@@ -43,7 +42,7 @@ class taskSet:
             inv = input()
             if inv != 'YES':
                 continue
-            return self.processNewScores()
+            return self.processNewScores(db)
 
     @log
     def getTask(self):
@@ -109,8 +108,8 @@ class taskSet:
         return out
 
     @log
-    def processNewScores(self):
-        data = self.db(startID=self.lastReadID)
+    def processNewScores(self, db):
+        data = db(startID=self.lastReadID)
         scores = data['scores']
         self.lastReadID = data['lastID']
         for key in scores:
