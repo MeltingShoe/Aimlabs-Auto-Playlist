@@ -1,5 +1,6 @@
 from utils import openYAML
 from category import categorySet
+from logger import log, logLevel, debug, info, warning, error, critical
 
 
 class container:

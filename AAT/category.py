@@ -1,5 +1,6 @@
 from selection import taskSet
 from utils import openYAML
+from logger import log, logLevel, debug, info, warning, error, critical
 
 
 class categorySet:
