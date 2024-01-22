@@ -3,7 +3,7 @@ import os
 import sqlite3
 import webbrowser
 import ast
-from logger import log, logLevel, debug, info, warning, error, critical
+from logger import log, logLevel, debug, info, warning, error, critical, logger_instance
 
 
 @log
@@ -216,6 +216,7 @@ class scoreDB:
 
 @devBlock
 def launchTask(ID):
+    quit()
     url = 'aimlab://workshop?id='
     url += str(ID)
     webbrowser.open(url)
@@ -223,6 +224,7 @@ def launchTask(ID):
 
 @log
 def YN(prompt):
+    return True
     if type(prompt) != str:
         print('bad prompt type')
         exit()
@@ -237,6 +239,7 @@ def YN(prompt):
         return False
     if a == 'q' or a == 'quit':
         if YN('Would you like to quit?'):
+            critical(logger_instance.acc.accTime)
             quit()
     print('invalid input. Enter Y or N')
     out = YN(prompt)

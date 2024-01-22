@@ -5,6 +5,30 @@ import os
 import datetime
 import yaml
 import time
+import ast
+
+
+class timeAccumulator:
+    def __init__(self):
+        self.accTime = 0
+        self.startTime = None
+
+    def start(self):
+        self.time = time.perf_counter()
+
+    def stop(self):
+        elapsed = time.perf_counter()-self.time
+        self.accTime += elapsed
+
+    def readTime(self, func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            self.start()
+            result = func(*args, **kwargs)
+            self.stop()
+            return result
+
+        return wrapper
 
 
 def format_list_as_table(row):
@@ -65,6 +89,8 @@ def processMatrix(input_matrix):
 
 class Logger:
     def __init__(self):
+        self.acc = timeAccumulator()
+
         config = self.loadConfig()
         self.prints = config['prints']
         self.printLevel = config['printLevel']
@@ -84,13 +110,15 @@ class Logger:
         log_file_name = f"logfile_{timestamp}.txt"
         log_file_path = os.path.join(log_dir, log_file_name)
         self.log_file_path = log_file_path
-        self.level_name = {
-            '1': 'DEBUG',
-            '2': 'INFO',
-            '3': 'WARNING',
-            '4': 'ERROR',
-            '5': 'CRITICAL'
-        }
+        self.level_name = {'1': 'DEBUG',
+                           '2': 'INFO',
+                           '3': 'WARNING',
+                           '4': 'ERROR',
+                           '5': 'CRITICAL'
+                           }
+
+    def outputAcc(self):
+        self.logMsg(5, msg=self.acc.accTime)
 
     def loadConfig(self):
         path = os.path.abspath(os.path.join(
@@ -104,24 +132,28 @@ class Logger:
     def _get_caller_info(self):
         # Get information about the caller (file, line, function)
         # Adjusted to consider the frame outside the wrapper
-        frame_info = inspect.stack()[3]
-        caller_frame = frame_info[0]
-        file_name = os.path.basename(
-            caller_frame.f_globals['__file__'])  # Changed this line
-        line_number = frame_info[2]
-        function_name = caller_frame.f_code.co_name
+        self.acc.start()
+        frame = inspect.currentframe()
+        frame = frame.f_back
+        frame = frame.f_back
+        frame = frame.f_back
+        line_number = frame.f_lineno
+        function_name = frame.f_code.co_name
+        file_name = os.path.basename(frame.f_globals['__file__'])
+        self.acc.stop()
 
         return f"{file_name}:{line_number} - {function_name}"
 
     def logMsg(self, level, msg=None):
         if (self.prints == False) and (self.logs == False):
             return False
-
+        callerInfo = self._get_caller_info()
         if isMatrix(msg):
             processed_msg = processMatrix(msg)
-            logMsg = f"{self.level_name[str(level)]} - {self._get_caller_info()} - {processed_msg}"
+
+            logMsg = f"{self.level_name[str(level)]} - {callerInfo} - {processed_msg}"
         else:
-            logMsg = f"{self.level_name[str(level)]} - {self._get_caller_info()} - {msg}" if msg else f"{self._get_caller_info()}"
+            logMsg = f"{self.level_name[str(level)]} - {callerInfo} - {msg}" if msg else f"{callerInfo}"
 
         if self.prints and level >= self.printLevel:
             print(logMsg)
