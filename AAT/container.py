@@ -5,20 +5,20 @@ from logger import log, logLevel, debug, info, warning, error, critical
 
 class container:
     @log
-    def __init__(self, config='config.yaml'):
+    def __init__(self, db, config='config.yaml'):
         self.config = openYAML(config)
         self.categorySets = []
         self.categorySetConfigs = self.config['categoryConfigs']
-        self.initCategories()
+        self.initCategories(db)
 
     @log
-    def initCategories(self):
+    def initCategories(self, db):
         for category in self.categorySetConfigs:
-            self.categorySets.append(categorySet(category))
+            self.categorySets.append(categorySet(category, db))
 
     @log
-    def run(self):
-        return self.categorySets[0].run()
+    def run(self, db):
+        return self.categorySets[0].run(db)
 
 
 def main():
