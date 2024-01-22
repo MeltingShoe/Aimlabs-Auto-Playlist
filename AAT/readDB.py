@@ -1,8 +1,7 @@
+import os
 import sqlite3
 from utils import openYAML
 from logger import log, logLevel, debug, info, warning, error, critical
-<<<<<<< HEAD
-import os
 
 
 class readAimlabsDB:
@@ -18,11 +17,11 @@ class readAimlabsDB:
 
     @log
     def readDB(self):
-        testID = 1700
+        testID = 1500
         con = sqlite3.connect(self.dbPath)
         cur = con.cursor()
         res = cur.execute(
-            "SELECT taskId, klutchId, createDate, taskName, score, performance FROM TaskData WHERE taskId > 1500 AND taskName LIKE '%meltingshoe%' OR taskId > 1500 AND taskName LIKE '%hartrean%'")
+            "SELECT taskId, klutchId, createDate, taskName, score, performance FROM TaskData WHERE taskId > " + str(testID) + " AND taskName LIKE '%meltingshoe%' OR taskId > " + str(testID) + " AND taskName LIKE '%hartrean%'")
         out = res.fetchall()
         warning(out)
         self.data = out
@@ -31,19 +30,10 @@ class readAimlabsDB:
 
 def main():
     db = readAimlabsDB()
-
-    for item in db():
+    out = db.readDB()
+    for item in out:
         warning(item)
 
 
 if __name__ == '__main__':
     main()
-=======
-
-
-class readAimlabsDB:
-    def __init__(self):
-        config = openYAML('userConfig')
-        self.dbPath = os.path.abspath(os.path.join(os.getenv(
-            "APPDATA"), os.pardir, config['dbPath']))
->>>>>>> 73dbcb6fb2fbdb1275aadf08f1819e8ba7ec99d2
