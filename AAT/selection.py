@@ -118,17 +118,25 @@ class taskSet:
         start = time.time()
         data = self.db(startID=self.lastReadID)
         end = time.time()
-        warning('TIME TO PULL FROM DB')
-        warning(end-start)
+        info('TIME TO PULL FROM DB')
+        info(end-start)
         scores = data['scores']
         self.lastReadID = data['lastID']
         for key in scores:
             score = scores[key]
+            start = time.time()
             self.processScore(score)
+            end = time.time()
+            info('TIME TO PROCESS')
+            info(end-start)
 
     @log
     def processScore(self, score):
+        start = time.time()
         score = self.processScoreXY(score)
+        end = time.time()
+        info('TIME TO GET XY')
+        info(end-start)
         if score is False:
             return False
         convOut = self.processResults(score, score['x'], score['y'])
