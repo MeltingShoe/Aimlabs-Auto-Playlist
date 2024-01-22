@@ -1,14 +1,16 @@
 from functionGenerator import func
-from utils import saveYAML, openYAML, launchTask, scoreDB, rawDB
+from utils import saveYAML, openYAML, launchTask, scoreDB
 from logger import log, logLevel, debug, info, warning, error, critical
 from convolution import convolution
 import random
 import numpy as np
+from readDB import readAimlabsDB
 
 
 class taskSet:
     @log
     def __init__(self, configPath):
+        self.lastReadID = 0
         self.debug = True
         self.runs = 0
         self.config = openYAML(configPath)
@@ -22,9 +24,7 @@ class taskSet:
         self.performanceFunction = func(self.config['performanceFunction'])
         self.stats = {}
         self.lastBM = False
-        nameList = self.getNameList()
-        mainConfig = openYAML('config.yaml')
-        self.db = scoreDB(nameList, resetPoint=mainConfig['resetPoint'])
+        self.db = readAimlabsDB()
         self.stepFunc = func(self.config['stepFunc'])
         self.weightFunc = func(self.config['weightFunc'])
         self.processNewScores()
@@ -110,16 +110,18 @@ class taskSet:
 
     @log
     def processNewScores(self):
-        while True:
-            score = self.db()
-            if score == False:
-                break
-            else:
-                self.processScore(score)
+        data = self.db(startID=self.lastReadID)
+        scores = data['scores']
+        self.lastReadID = data['lastID']
+        for key in scores:
+            score = scores[key]
+            self.processScore(score)
 
     @log
     def processScore(self, score):
         score = self.processScoreXY(score)
+        if score is False:
+            return False
         convOut = self.processResults(score, score['x'], score['y'])
         self.runs += 1
         return convOut
@@ -127,16 +129,17 @@ class taskSet:
     @log
     def processScoreXY(self, score):
         for task in self.BMs:
-            if score['name'] == task['name']:
+            if score['taskName'] == task['name']:
                 score['x'] = task['x']
                 score['y'] = task['y']
                 return score
         for row in self.trainers:
             for task in row:
-                if score['name'] == task['name']:
+                if score['taskName'] == task['name']:
                     score['x'] = task['x']
                     score['y'] = task['y']
                     return score
+        return False
 
     @log
     def processResults(self, taskData, x, y):
@@ -159,8 +162,8 @@ class taskSet:
     @log
     def score1w6tPOP(self, taskData):
         score = taskData['score']
-        hits = taskData['hits']
-        misses = taskData['misses']
+        hits = taskData['hitsTotal']
+        misses = taskData['missesTotal']
         hitPoints = hits * 10
         missPoints = misses * 5
         total = hitPoints - missPoints

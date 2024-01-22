@@ -119,10 +119,11 @@ class rawDB:
 
     @log
     def readDB(self):
+
         con = sqlite3.connect(self.dbPath)
         cur = con.cursor()
-        # right here make it select things after last ID and update ID
-        res = cur.execute("SELECT * FROM TaskData")
+        res = cur.execute(
+            "SELECT * FROM TaskData WHERE taskName LIKE '%meltingshoe%'")
         out = res.fetchall()
         self.data = out
         return out
@@ -228,10 +229,15 @@ def YN(prompt):
     print(prompt, '(Y/N)')
     a = input()
     a = a.casefold()
+    if prompt == 'Would you like to quit?' and a != 'no' and a != 'n':
+        return True
     if a == 'y' or a == 'yes':
         return True
     if a == 'n' or a == 'no':
         return False
+    if a == 'q' or a == 'quit':
+        if YN('Would you like to quit?'):
+            quit()
     print('invalid input. Enter Y or N')
     out = YN(prompt)
     return out
