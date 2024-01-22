@@ -1,10 +1,11 @@
 
-from logger import log, logLevel, debug, info, warning, error, critical
+
 import time
 from utils import devBlock
 import traceback
 from modelLoader import loadModel
 from readDB import readAimlabsDB
+from logger import log, logLevel, debug, info, warning, error, critical
 
 
 @devBlock
