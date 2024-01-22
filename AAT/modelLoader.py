@@ -1,4 +1,4 @@
-from logger import log, logLevel, debug, info, warning, error, critical
+from logger import log, logLevel, debug, info, warning, error, critical, logger_instance
 import pickle
 import os
 from container import container
@@ -23,6 +23,8 @@ def loadModel():
         warning('NO SAVED DATA FOUND')
         db = readAimlabsDB()
         runtime = container(db)
+        # logger_instance.acc.start()
         with open(savePath, 'wb') as pickle_file:
             pickle.dump(runtime, pickle_file)
+        # logger_instance.acc.stop()
     return runtime

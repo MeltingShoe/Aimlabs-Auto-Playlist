@@ -132,7 +132,7 @@ class Logger:
     def _get_caller_info(self):
         # Get information about the caller (file, line, function)
         # Adjusted to consider the frame outside the wrapper
-        self.acc.start()
+
         frame = inspect.currentframe()
         frame = frame.f_back
         frame = frame.f_back
@@ -140,7 +140,6 @@ class Logger:
         line_number = frame.f_lineno
         function_name = frame.f_code.co_name
         file_name = os.path.basename(frame.f_globals['__file__'])
-        self.acc.stop()
 
         return f"{file_name}:{line_number} - {function_name}"
 
