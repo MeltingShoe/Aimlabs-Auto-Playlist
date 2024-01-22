@@ -5,11 +5,13 @@ from convolution import convolution
 import random
 import numpy as np
 from readDB import readAimlabsDB
+import time
 
 
 class taskSet:
     @log
     def __init__(self, configPath):
+        self.lastReadID = 0
         self.debug = True
         self.runs = 0
         self.config = openYAML(configPath)
@@ -26,7 +28,11 @@ class taskSet:
         self.db = readAimlabsDB()
         self.stepFunc = func(self.config['stepFunc'])
         self.weightFunc = func(self.config['weightFunc'])
+        start = time.time()
         self.processNewScores()
+        end = time.time()
+        warning('TIME TO PROCESS RESULT')
+        warning(end-start)
 
     @log
     def runTask(self):
@@ -109,7 +115,13 @@ class taskSet:
 
     @log
     def processNewScores(self):
-        scores = self.db()
+        start = time.time()
+        data = self.db(startID=self.lastReadID)
+        end = time.time()
+        warning('TIME TO PULL FROM DB')
+        warning(end-start)
+        scores = data['scores']
+        self.lastReadID = data['lastID']
         for key in scores:
             score = scores[key]
             self.processScore(score)

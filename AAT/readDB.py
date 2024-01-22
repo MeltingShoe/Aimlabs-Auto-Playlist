@@ -50,7 +50,7 @@ class readAimlabsDB:
             for key in unreadKeys:
                 out[key] = self.scoreData[key]
             return out
-        return self.scoreData
+        return {'scores': self.scoreData, 'lastID': lastID}
 
     @log
     def readDB(self):
