@@ -1,5 +1,5 @@
 #saveState
-#savedModelState.pkl
+savedModelState.pkl
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
