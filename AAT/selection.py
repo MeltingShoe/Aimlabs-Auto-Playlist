@@ -1,5 +1,5 @@
 from functionGenerator import func
-from utils import saveYAML, openYAML, launchTask
+from utils import saveYAML, openYAML, launchTask, YN
 from logger import log, logLevel, debug, info, warning, error, critical
 from convolution import convolution
 import random
@@ -13,6 +13,7 @@ class taskSet:
         self.lastReadID = 0
         self.debug = True
         self.runs = 0
+        self.targetRatio = 1
         self.config = openYAML(configPath)
         self.conv = convolution(self.config['convConfigFileName'])
         self.BMs = self.config['benchmarks']
@@ -28,6 +29,23 @@ class taskSet:
         self.weightFunc = func(self.config['weightFunc'])
         self.namesList = self.getNameList()
         self.processNewScores(db)
+        self.taskSetWeightSelectionFunction = func(
+            self.config['taskSetWeightSelectionFunction'])
+
+    @log
+    def calcTargetRatio(self, totalRatio):
+        return self.targetRatio / totalRatio
+
+    @log
+    def calcRatioError(self, totalRuns, totalRatio):
+        realRatio = self.runs/totalRuns
+        targetRatio = self.calcTargetRatio(totalRatio)
+        ratioError = targetRatio - realRatio
+        return ratioError
+
+    def calcRatioWeight(self, totalRuns, totalRatio):
+        err = self.calcRatioError(totalRuns, totalRatio)
+        return self.taskSetWeightSelectionFunction(err)
 
     @log
     def runTask(self, db):
@@ -39,9 +57,7 @@ class taskSet:
         while running:
             print('Launching '+tName)
             launchTask(ID)
-            print('type YES when done')
-            inv = input()
-            if inv != 'YES':
+            if YN('Press yes when done'):
                 continue
             return self.processNewScores(db)
 
@@ -173,6 +189,7 @@ class taskSet:
         acc = hits / shots
         performance = self.performanceFunction(acc)
         self.stats['acc'] = acc
+        warning(str(performance)+' '+str(taskData))
         return performance
 
     @log

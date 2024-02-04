@@ -79,9 +79,8 @@ class readAimlabsDB:
 
 def main():
     db = readAimlabsDB()
-    out = db(startID=1570)
-    for item in out:
-        warning(out[item])
+    out = db(startID=0)
+    print(out)
 
 
 if __name__ == '__main__':

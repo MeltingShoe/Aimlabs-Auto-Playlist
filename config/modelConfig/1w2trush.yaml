@@ -1,4 +1,22 @@
 convConfigFileName: '1w2tConvMatrix.yaml'
+taskSetWeightSelectionFunction: 
+  inputRanges:
+  - -1
+  - -0.2
+  - 0
+  - 0.2
+  - 1
+  outputRanges:
+  - 3
+  - 2
+  - 1
+  - 0.5
+  - 0.2
+  scales:
+  - 0
+  - 0
+  - 0
+  - 0
 benchmarks:
 - ID: 3135124191
   difficulty: BM

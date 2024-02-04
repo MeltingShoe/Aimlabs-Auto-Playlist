@@ -13,7 +13,9 @@ loadEnable = config['loadEnable']
 
 @log
 def checkSave():
-    return os.path.isfile(savePath) * loadEnable
+    if not loadEnable:
+        return False
+    return os.path.isfile(savePath)
 
 
 @log
